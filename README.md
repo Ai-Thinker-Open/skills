@@ -30,6 +30,13 @@ npx skills use seahi/skills --skill ai-thinker-c-coding-standard --agent claude-
 
 ## Available Skills
 
+| Skill | Description |
+|-------|-------------|
+| [ai-thinker-c-coding-standard](./skills/ai-thinker-c-coding-standard) | Ai-Thinker embedded C coding standard |
+| [coder-ai-m62-m61](./skills/coder-ai-m62-m61) | BL616/BL618 development guide (Wi-Fi 6 + BLE 5.0) |
+| [coder-ai-wb2](./skills/coder-ai-wb2) | Ai-WB2/BL602 development guide (Wi-Fi 4 + BLE 5.0) |
+| [add-skills](./skills/add-skills) | Guide for adding new skills to this repo |
+
 ### ai-thinker-c-coding-standard
 
 Ai-Thinker embedded product C coding standard. Use when writing, modifying, reviewing, or refactoring any embedded C code, or when generating .c/.h files, adding function header comments, or checking code standards.
@@ -39,12 +46,32 @@ Ai-Thinker embedded product C coding standard. Use when writing, modifying, revi
 - Reviewing code standards compliance
 - Generating Doxygen-style function headers
 
-**Key requirements:**
-- Doxygen-style function headers for public interfaces in `.h` files
-- Unified prefixes (`axk`/`aiio`/`ai`) for identifiers
-- 4-space indentation (no tabs)
-- Parameter validation
-- Standardized file organization
+### coder-ai-m62-m61
+
+Ai-Thinker BL616/BL618 series module development guide - Wi-Fi 6 + BLE 5.0 module, based on bouffalo_sdk.
+
+**Use cases:**
+- Developing with BL616/BL618 modules
+- GPIO, UART, SPI, I2C, DMA programming
+- Wi-Fi and BLE connectivity
+
+### coder-ai-wb2
+
+Ai-Thinker Ai-WB2 series module development guide (BL602 chip) - Wi-Fi 4 + BLE 5.0 module.
+
+**Use cases:**
+- Developing with Ai-WB2 modules
+- Peripheral programming (GPIO, UART, PWM, ADC)
+- MQTT, HTTP network protocols
+
+### add-skills
+
+Guide for adding new skills to this repository.
+
+**Use cases:**
+- Creating a new skill
+- Learning skill format and structure
+- Validating skills
 
 ## Repository Structure
 

@@ -30,6 +30,13 @@ npx skills use seahi/skills --skill ai-thinker-c-coding-standard --agent claude-
 
 ## 可用 Skills
 
+| Skill | 说明 |
+|-------|------|
+| [ai-thinker-c-coding-standard](./skills/ai-thinker-c-coding-standard) | 安信可嵌入式 C 编码规范 |
+| [coder-ai-m62-m61](./skills/coder-ai-m62-m61) | BL616/BL618 开发指南 (Wi-Fi 6 + BLE 5.0) |
+| [coder-ai-wb2](./skills/coder-ai-wb2) | Ai-WB2/BL602 开发指南 (Wi-Fi 4 + BLE 5.0) |
+| [add-skills](./skills/add-skills) | 向本仓库添加新 skill 的指南 |
+
 ### ai-thinker-c-coding-standard
 
 安信可（Ai-Thinker）嵌入式产品 C 语言编码规范。编写、修改、评审、重构任何嵌入式 C 代码，或生成 .c/.h 文件、加函数头注释、检查代码规范时使用。
@@ -39,12 +46,32 @@ npx skills use seahi/skills --skill ai-thinker-c-coding-standard --agent claude-
 - 评审代码规范合规性
 - 生成 Doxygen 风格的函数头注释
 
-**核心要求：**
-- 头文件对外接口加 Doxygen 函数头
-- 标识符统一前缀（`axk`/`aiio`/`ai`）
-- 4 空格缩进（禁止 Tab）
-- 参数校验
-- 规范的文件组织
+### coder-ai-m62-m61
+
+安信可 BL616/BL618 系列模组开发指南 - Wi-Fi 6 + BLE 5.0 模组，基于 bouffalo_sdk。
+
+**使用场景：**
+- BL616/BL618 模组开发
+- GPIO、UART、SPI、I2C、DMA 编程
+- Wi-Fi 和 BLE 连接
+
+### coder-ai-wb2
+
+安信可 Ai-WB2 系列模组开发指南 (BL602 芯片) - Wi-Fi 4 + BLE 5.0 模组。
+
+**使用场景：**
+- Ai-WB2 模组开发
+- 外设编程 (GPIO、UART、PWM、ADC)
+- MQTT、HTTP 网络协议
+
+### add-skills
+
+向本仓库添加新 skill 的指南。
+
+**使用场景：**
+- 创建新 skill
+- 学习 skill 格式和结构
+- 验证 skill
 
 ## 仓库结构
 
