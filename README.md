@@ -73,18 +73,22 @@ skills/
 
 ## Creating a New Skill
 
-1. Create a new directory under `skills/`:
+### Step 1: Create the Skill Directory
 
 ```bash
-mkdir skills/my-new-skill
+cd skills/
+mkdir my-new-skill
+cd my-new-skill
 ```
 
-2. Create `SKILL.md` with YAML frontmatter:
+### Step 2: Create SKILL.md
+
+Create `SKILL.md` with YAML frontmatter. The `description` field is the primary trigger - agents use it to decide when to activate this skill.
 
 ```markdown
 ---
 name: my-new-skill
-description: What this skill does and when to use it
+description: What this skill does and when to use it. Include trigger phrases like "when user asks to X" or "for Y tasks".
 ---
 
 # My Skill Title
@@ -101,21 +105,84 @@ Describe the scenarios where this skill should be used.
 2. Then, do that
 ```
 
-3. Optionally add resource directories:
+### Step 3: (Optional) Add Resource Directories
 
 ```bash
-mkdir skills/my-new-skill/scripts    # Executable helper scripts
-mkdir skills/my-new-skill/references # Documentation loaded on demand
-mkdir skills/my-new-skill/assets     # Files used in output
+mkdir scripts    # Executable helper scripts (Python/Bash/Node)
+mkdir references # Documentation loaded on demand by the agent
+mkdir assets     # Templates, images, fonts used in output
+```
+
+### Step 4: Validate Your Skill
+
+```bash
+# From the repo root
+npm run validate
+```
+
+Expected output:
+```
+🔍 Validating skills...
+
+✅ skills/my-new-skill/SKILL.md
+
+📊 Found 2 skill(s)
+
+✅ All skills are valid
 ```
 
 ### Skill Frontmatter Fields
 
 | Field | Required | Description |
 |-------|----------|-------------|
-| `name` | Yes | Unique identifier (lowercase, hyphens allowed) |
-| `description` | Yes | Brief explanation of what the skill does and when to use it |
-| `metadata.internal` | No | Set to `true` to hide from normal discovery |
+| `name` | Yes | Unique identifier (lowercase, hyphens only) |
+| `description` | Yes | What the skill does + when to use it (this triggers activation) |
+| `metadata.internal` | No | Set `true` to hide from normal discovery |
+
+### Example: Complete Skill
+
+```
+skills/
+└── code-review/
+    ├── SKILL.md              # Main skill file
+    ├── scripts/
+    │   └── lint.sh           # Helper script
+    └── references/
+        └── style-guide.md    # Reference docs
+```
+
+`skills/code-review/SKILL.md`:
+```markdown
+---
+name: code-review
+description: Review code for quality, security, and best practices. Use when user asks to review, audit, or check code.
+---
+
+# Code Review Skill
+
+Review code changes following these guidelines.
+
+## Steps
+
+1. Check for security vulnerabilities
+2. Verify error handling
+3. Review naming conventions
+4. Suggest improvements
+```
+
+### Directory Structure Reference
+
+```
+skills/
+└── <skill-name>/                 # Skill name (lowercase, hyphens)
+    ├── SKILL.md                  # REQUIRED: Main skill file
+    ├── scripts/                  # OPTIONAL: Executable scripts
+    │   └── helper.py
+    ├── references/               # OPTIONAL: Docs loaded on demand
+    │   └── api-docs.md
+    └── assets/                   # OPTIONAL: Output templates/files
+        └── template.html
+```
 
 ## Installation Options
 

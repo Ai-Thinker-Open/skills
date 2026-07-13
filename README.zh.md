@@ -73,18 +73,22 @@ skills/
 
 ## 创建新 Skill
 
-1. 在 `skills/` 目录下创建新文件夹：
+### 步骤 1：创建 Skill 目录
 
 ```bash
-mkdir skills/my-new-skill
+cd skills/
+mkdir my-new-skill
+cd my-new-skill
 ```
 
-2. 创建 `SKILL.md` 文件，包含 YAML frontmatter：
+### 步骤 2：创建 SKILL.md
+
+创建 `SKILL.md` 文件，包含 YAML frontmatter。`description` 字段是主要触发器 - agent 根据它来决定何时激活此 skill。
 
 ```markdown
 ---
 name: my-new-skill
-description: 这个 skill 做什么以及何时使用
+description: 这个 skill 做什么以及何时使用。包含触发短语，如"当用户要求 X"或"用于 Y 任务"。
 ---
 
 # Skill 标题
@@ -101,7 +105,84 @@ description: 这个 skill 做什么以及何时使用
 2. 然后，做那个
 ```
 
-3. 可选添加资源目录：
+### 步骤 3：（可选）添加资源目录
+
+```bash
+mkdir scripts    # 可执行的辅助脚本（Python/Bash/Node）
+mkdir references # 按需加载的文档
+mkdir assets     # 输出中使用的模板、图片、字体
+```
+
+### 步骤 4：验证你的 Skill
+
+```bash
+# 在仓库根目录执行
+npm run validate
+```
+
+预期输出：
+```
+🔍 Validating skills...
+
+✅ skills/my-new-skill/SKILL.md
+
+📊 Found 2 skill(s)
+
+✅ All skills are valid
+```
+
+### Skill Frontmatter 字段
+
+| 字段 | 必需 | 说明 |
+|------|------|------|
+| `name` | 是 | 唯一标识符（仅限小写和连字符） |
+| `description` | 是 | skill 功能 + 使用场景（触发激活的关键） |
+| `metadata.internal` | 否 | 设为 `true` 可从常规发现中隐藏 |
+
+### 示例：完整的 Skill
+
+```
+skills/
+└── code-review/
+    ├── SKILL.md              # 主文件
+    ├── scripts/
+    │   └── lint.sh           # 辅助脚本
+    └── references/
+        └── style-guide.md    # 参考文档
+```
+
+`skills/code-review/SKILL.md`：
+```markdown
+---
+name: code-review
+description: 审查代码质量、安全性和最佳实践。当用户要求审查、审计或检查代码时使用。
+---
+
+# 代码审查 Skill
+
+遵循以下指南审查代码变更。
+
+## 步骤
+
+1. 检查安全漏洞
+2. 验证错误处理
+3. 审查命名规范
+4. 建议改进
+```
+
+### 目录结构参考
+
+```
+skills/
+└── <skill-name>/                 # Skill 名称（小写，连字符）
+    ├── SKILL.md                  # 必需：主文件
+    ├── scripts/                  # 可选：可执行脚本
+    │   └── helper.py
+    ├── references/               # 可选：按需加载的文档
+    │   └── api-docs.md
+    └── assets/                   # 可选：输出模板/文件
+        └── template.html
+```
 
 ```bash
 mkdir skills/my-new-skill/scripts    # 可执行的辅助脚本
