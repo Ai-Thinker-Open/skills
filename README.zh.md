@@ -256,7 +256,7 @@ Skills 遵循 [Agent Skills 规范](https://agentskills.io)，兼容以下平台
 | Windsurf | `windsurf` |
 | Cline | `cline` |
 | Roo Code | `roo` |
-| + 60 个更多 | 查看[完整列表](https://github.com/vercel-labs/skills#supported-agents) |
+| + 60 个更多 | 查看[完整列表](https://agentskills.io#supported-agents) |
 
 ## 开发
 

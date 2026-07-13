@@ -242,7 +242,7 @@ Skills follow the [Agent Skills specification](https://agentskills.io) and work 
 | Windsurf | `windsurf` |
 | Cline | `cline` |
 | Roo Code | `roo` |
-| + 60 more | See [full list](https://github.com/vercel-labs/skills#supported-agents) |
+| + 60 more | See [full list](https://agentskills.io#supported-agents) |
 
 ## Development
 
