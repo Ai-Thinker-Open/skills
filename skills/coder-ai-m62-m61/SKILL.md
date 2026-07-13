@@ -840,7 +840,6 @@ Detailed API documentation is stored independently in the `references/` director
 | [Clock](./references/clock.md) | CPU frequency, PLL configuration, clock gating, peripheral clock source |
 | [Reset](./references/reset.md) | Peripheral reset control, 36+ reset number mapping table |
 | [IRQ](./references/irq.md) | ECLIC interrupt controller, register, enable/disable, priority |
-| [Core](./references/core.md) | CPU core access, mtime timer, CLINT |
 | [PM](./references/pm.md) | Power management, deep sleep, hibernate, clock gating, Wi-Fi power consumption |
 | [FreeRTOS](./references/freertos.md) | Tasks, queues, semaphores, mutexes, tick delay (no vTaskStartScheduler needed) |
 | [CKS](./references/cks.md) | Clock security system, hardware checksum, tamper detection |
