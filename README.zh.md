@@ -33,6 +33,7 @@ npx skills use seahi/skills --skill ai-thinker-c-coding-standard --agent claude-
 | Skill | 说明 |
 |-------|------|
 | [ai-thinker-c-coding-standard](./skills/ai-thinker-c-coding-standard) | 安信可嵌入式 C 编码规范 |
+| [embedded-code-review](./skills/embedded-code-review) | 安信可嵌入式 C 代码深度审查 |
 | [coder-ai-m62-m61](./skills/coder-ai-m62-m61) | BL616/BL618 开发指南 (Wi-Fi 6 + BLE 5.0) |
 | [coder-ai-wb2](./skills/coder-ai-wb2) | Ai-WB2/BL602 开发指南 (Wi-Fi 4 + BLE 5.0) |
 | [add-skills](./skills/add-skills) | 向本仓库添加新 skill 的指南 |
@@ -45,6 +46,17 @@ npx skills use seahi/skills --skill ai-thinker-c-coding-standard --agent claude-
 - 编写嵌入式 C 代码
 - 评审代码规范合规性
 - 生成 Doxygen 风格的函数头注释
+
+### embedded-code-review
+
+安信可嵌入式 C 代码深度审查 skill。审查安全、内存管理、FreeRTOS 任务规范、中断处理、编码规范合规等。
+
+**使用场景：**
+- 嵌入式代码安全审查
+- FreeRTOS 任务创建规范检查
+- 内存泄漏/溢出风险排查
+- ISR 合规性审查
+- 编码规范逐项核对
 
 ### coder-ai-m62-m61
 

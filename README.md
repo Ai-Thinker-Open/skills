@@ -33,6 +33,7 @@ npx skills use seahi/skills --skill ai-thinker-c-coding-standard --agent claude-
 | Skill | Description |
 |-------|-------------|
 | [ai-thinker-c-coding-standard](./skills/ai-thinker-c-coding-standard) | Ai-Thinker embedded C coding standard |
+| [embedded-code-review](./skills/embedded-code-review) | Ai-Thinker embedded C deep code review |
 | [coder-ai-m62-m61](./skills/coder-ai-m62-m61) | BL616/BL618 development guide (Wi-Fi 6 + BLE 5.0) |
 | [coder-ai-wb2](./skills/coder-ai-wb2) | Ai-WB2/BL602 development guide (Wi-Fi 4 + BLE 5.0) |
 | [add-skills](./skills/add-skills) | Guide for adding new skills to this repo |
@@ -45,6 +46,17 @@ Ai-Thinker embedded product C coding standard. Use when writing, modifying, revi
 - Writing embedded C code
 - Reviewing code standards compliance
 - Generating Doxygen-style function headers
+
+### embedded-code-review
+
+Ai-Thinker embedded C deep code review skill. Covers safety, memory management, FreeRTOS task standards, ISR compliance, coding standard checks, and more.
+
+**Use cases:**
+- Embedded code security audit
+- FreeRTOS task creation standards check
+- Memory leak/overflow risk detection
+- ISR compliance review
+- Coding standard checklist verification
 
 ### coder-ai-m62-m61
 

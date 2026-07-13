@@ -6,6 +6,11 @@
       "name": "ai-thinker-c-coding-standard",
       "path": "./skills/ai-thinker-c-coding-standard",
       "description": "安信可（Ai-Thinker）嵌入式产品 C 语言编码规范"
+    },
+    {
+      "name": "embedded-code-review",
+      "path": "./skills/embedded-code-review",
+      "description": "深度嵌入式 C 代码审查，涵盖编码规范、运行安全、内存管理、FreeRTOS 任务、中断处理、线程安全等"
     }
   ]
 }
