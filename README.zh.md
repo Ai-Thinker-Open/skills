@@ -56,9 +56,7 @@ skills/
 │       ├── scripts/                # 辅助脚本（可选）
 │       ├── references/             # 按需加载的文档（可选）
 │       └── assets/                 # 输出中使用的文件（可选）
-├── .github/workflows/              # CI/CD 工作流
-│   ├── validate.yml                # 推送/PR 时验证
-│   └── release.yml                 # 推送标签时自动发布
+├── .coding-ci.yml                  # Coding CI/CD 配置
 ├── bin/                            # CLI 工具
 │   └── cli.js                      # seahi-skills CLI
 ├── scripts/                        # 构建和发布脚本
@@ -313,12 +311,15 @@ git tag -a v0.0.2 -m "Release v0.0.2"
 git push origin main --tags
 ```
 
-### CI/CD 工作流
+### CI/CD
 
-| 工作流 | 触发条件 | 说明 |
-|--------|----------|------|
-| `validate.yml` | 推送到 main、PR | 验证 SKILL.md 格式 |
-| `release.yml` | 推送版本标签 (`v*`) | 构建并创建 GitHub Release |
+项目使用 `.coding-ci.yml` 配置 Coding 平台的 CI/CD 流水线。
+
+| 阶段 | 触发条件 | 说明 |
+|------|----------|------|
+| validate | 所有推送 | 验证 SKILL.md 格式 |
+| build | 所有推送 | 构建 dist/ 目录 |
+| release | 推送 `v*` 标签 | 创建 GitHub Release |
 
 ## 许可证
 

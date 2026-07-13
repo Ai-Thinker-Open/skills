@@ -56,9 +56,7 @@ skills/
 │       ├── scripts/                # Helper scripts (optional)
 │       ├── references/             # Documentation loaded on demand (optional)
 │       └── assets/                 # Files used in output (optional)
-├── .github/workflows/              # CI/CD workflows
-│   ├── validate.yml                # Validation on push/PR
-│   └── release.yml                 # Auto-release on tag push
+├── .coding-ci.yml                  # Coding CI/CD configuration
 ├── bin/                            # CLI tools
 │   └── cli.js                      # seahi-skills CLI
 ├── scripts/                        # Build and release scripts
@@ -299,12 +297,15 @@ git tag -a v0.0.2 -m "Release v0.0.2"
 git push origin main --tags
 ```
 
-### CI/CD Workflows
+### CI/CD
 
-| Workflow | Trigger | Description |
-|----------|---------|-------------|
-| `validate.yml` | Push to main, PRs | Validates SKILL.md format |
-| `release.yml` | Push version tag (`v*`) | Builds and creates GitHub Release |
+项目使用 `.coding-ci.yml` 配置 Coding 平台的 CI/CD 流水线。
+
+| 阶段 | 触发条件 | 说明 |
+|------|----------|------|
+| validate | 所有推送 | 验证 SKILL.md 格式 |
+| build | 所有推送 | 构建 dist/ 目录 |
+| release | 推送 `v*` 标签 | 创建 GitHub Release |
 
 ## License
 
