@@ -1,0 +1,244 @@
+# Agent Skills 集合
+
+跨平台通用的 AI Agent Skills 集合，支持 MiMoCode、Claude Code、Codex、Cursor 等 69+ 平台。
+
+[![skills.sh](https://skills.sh/b/seahi/skills)](https://skills.sh/seahi/skills)
+
+## 快速开始
+
+### 安装所有 Skills
+
+```bash
+npx skills add seahi/skills
+```
+
+### 安装指定 Skills
+
+```bash
+npx skills add seahi/skills --skill ai-thinker-c-coding-standard
+```
+
+### 无需安装直接使用
+
+```bash
+# 通过管道传递给 agent
+npx skills use seahi/skills@ai-thinker-c-coding-standard | claude
+
+# 交互式启动 agent
+npx skills use seahi/skills --skill ai-thinker-c-coding-standard --agent claude-code
+```
+
+## 可用 Skills
+
+### ai-thinker-c-coding-standard
+
+安信可（Ai-Thinker）嵌入式产品 C 语言编码规范。编写、修改、评审、重构任何嵌入式 C 代码，或生成 .c/.h 文件、加函数头注释、检查代码规范时使用。
+
+**使用场景：**
+- 编写嵌入式 C 代码
+- 评审代码规范合规性
+- 生成 Doxygen 风格的函数头注释
+
+**核心要求：**
+- 头文件对外接口加 Doxygen 函数头
+- 标识符统一前缀（`axk`/`aiio`/`ai`）
+- 4 空格缩进（禁止 Tab）
+- 参数校验
+- 规范的文件组织
+
+## 仓库结构
+
+```
+skills/
+├── skills/                          # 所有 skills 存放于此
+│   └── ai-thinker-c-coding-standard/
+│       ├── SKILL.md                # Skill 主文件（必需）
+│       ├── scripts/                # 辅助脚本（可选）
+│       ├── references/             # 按需加载的文档（可选）
+│       └── assets/                 # 输出中使用的文件（可选）
+├── .github/workflows/              # CI/CD 工作流
+│   ├── validate.yml                # 推送/PR 时验证
+│   └── release.yml                 # 推送标签时自动发布
+├── bin/                            # CLI 工具
+│   └── cli.js                      # seahi-skills CLI
+├── scripts/                        # 构建和发布脚本
+│   ├── validate.mjs                # 验证 SKILL.md 文件
+│   ├── build.mjs                   # 构建 skills 到 dist/
+│   └── release.sh                  # 本地发布脚本
+├── README.md                       # English documentation
+├── README.zh.md                    # 中文说明
+├── package.json
+└── skills.sh.json                  # skills.sh 发现配置
+```
+
+## 创建新 Skill
+
+1. 在 `skills/` 目录下创建新文件夹：
+
+```bash
+mkdir skills/my-new-skill
+```
+
+2. 创建 `SKILL.md` 文件，包含 YAML frontmatter：
+
+```markdown
+---
+name: my-new-skill
+description: 这个 skill 做什么以及何时使用
+---
+
+# Skill 标题
+
+当此 skill 被激活时，agent 应遵循的指令。
+
+## 使用场景
+
+描述此 skill 应被使用的场景。
+
+## 步骤
+
+1. 首先，做这个
+2. 然后，做那个
+```
+
+3. 可选添加资源目录：
+
+```bash
+mkdir skills/my-new-skill/scripts    # 可执行的辅助脚本
+mkdir skills/my-new-skill/references # 按需加载的文档
+mkdir skills/my-new-skill/assets     # 输出中使用的文件
+```
+
+### Skill Frontmatter 字段
+
+| 字段 | 必需 | 说明 |
+|------|------|------|
+| `name` | 是 | 唯一标识符（小写，允许连字符） |
+| `description` | 是 | 简要说明 skill 的功能和使用场景 |
+| `metadata.internal` | 否 | 设为 `true` 可从常规发现中隐藏 |
+
+## 安装选项
+
+### 安装范围
+
+| 范围 | 标志 | 位置 | 使用场景 |
+|------|------|------|----------|
+| **项目** | （默认） | `./<agent>/skills/` | 随项目提交，团队共享 |
+| **全局** | `-g` | `~/<agent>/skills/` | 所有项目可用 |
+
+### 安装方式
+
+| 方式 | 说明 |
+|------|------|
+| **符号链接**（推荐） | 为每个 agent 创建指向规范副本的符号链接。单一事实来源，易于更新。 |
+| **复制** | 为每个 agent 创建独立副本。符号链接不支持时使用。 |
+
+### 常用命令
+
+```bash
+# 列出仓库中可用的 skills
+npx skills add seahi/skills --list
+
+# 安装到指定 agents
+npx skills add seahi/skills -a claude-code -a opencode
+
+# 全局安装
+npx skills add seahi/skills -g
+
+# 非交互式安装（CI/CD）
+npx skills add seahi/skills --skill ai-thinker-c-coding-standard -g -a claude-code -y
+
+# 安装所有 skills 到所有 agents
+npx skills add seahi/skills --all
+
+# 列出已安装的 skills
+npx skills list
+
+# 更新已安装的 skills
+npx skills update
+
+# 移除已安装的 skills
+npx skills remove my-skill
+```
+
+## 支持的平台
+
+Skills 遵循 [Agent Skills 规范](https://agentskills.io)，兼容以下平台：
+
+| 平台 | Agent 标志 |
+|------|-----------|
+| MiMoCode | `opencode` |
+| Claude Code | `claude-code` |
+| Codex | `codex` |
+| Cursor | `cursor` |
+| OpenCode | `opencode` |
+| GitHub Copilot | `github-copilot` |
+| Gemini CLI | `gemini-cli` |
+| Windsurf | `windsurf` |
+| Cline | `cline` |
+| Roo Code | `roo` |
+| + 60 个更多 | 查看[完整列表](https://github.com/vercel-labs/skills#supported-agents) |
+
+## 开发
+
+### 本地开发
+
+```bash
+# 验证所有 skills
+npm run validate
+
+# 构建 skills 到 dist/
+npm run build
+
+# 运行 CLI
+node bin/cli.js list
+```
+
+### 发布
+
+当你推送版本标签时，GitHub Actions 会：
+
+1. 验证所有 skills
+2. 构建包
+3. 创建 GitHub Release 并附带构建产物
+
+#### 快速发布（推荐）
+
+```bash
+# 补丁版本 (0.0.1 -> 0.0.2)
+./scripts/release.sh patch
+
+# 次版本 (0.0.1 -> 0.1.0)
+./scripts/release.sh minor
+
+# 主版本 (0.0.1 -> 1.0.0)
+./scripts/release.sh major
+```
+
+#### 手动发布
+
+```bash
+# 1. 更新 package.json 版本
+npm version patch --no-git-tag-version
+
+# 2. 提交更改
+git add package.json
+git commit -m "chore: release v0.0.2"
+
+# 3. 创建标签
+git tag -a v0.0.2 -m "Release v0.0.2"
+
+# 4. 推送
+git push origin main --tags
+```
+
+### CI/CD 工作流
+
+| 工作流 | 触发条件 | 说明 |
+|--------|----------|------|
+| `validate.yml` | 推送到 main、PR | 验证 SKILL.md 格式 |
+| `release.yml` | 推送版本标签 (`v*`) | 构建并创建 GitHub Release |
+
+## 许可证
+
+MIT

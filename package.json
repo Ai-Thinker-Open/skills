@@ -1,0 +1,40 @@
+{
+  "name": "seahi-skills",
+  "version": "0.0.1",
+  "description": "Cross-platform AI Agent Skills collection for MiMoCode, Claude Code, Codex, Cursor and 69+ platforms",
+  "type": "module",
+  "keywords": [
+    "agent-skills",
+    "ai",
+    "mimocode",
+    "claude-code",
+    "codex",
+    "cursor",
+    "skills"
+  ],
+  "author": "Seahi",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/seahi/skills.git"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "files": [
+    "skills/",
+    "README.md",
+    "README.zh.md",
+    "skills.sh.json"
+  ],
+  "bin": {
+    "seahi-skills": "./bin/cli.js"
+  },
+  "scripts": {
+    "version:patch": "npm version patch --no-git-tag-version",
+    "version:minor": "npm version minor --no-git-tag-version",
+    "version:major": "npm version major --no-git-tag-version",
+    "validate": "node scripts/validate.mjs",
+    "build": "node scripts/build.mjs"
+  }
+}

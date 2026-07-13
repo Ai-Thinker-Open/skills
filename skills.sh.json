@@ -1,0 +1,11 @@
+{
+  "name": "seahi-skills",
+  "description": "跨平台通用的 AI Agent Skills 集合",
+  "skills": [
+    {
+      "name": "ai-thinker-c-coding-standard",
+      "path": "./skills/ai-thinker-c-coding-standard",
+      "description": "安信可（Ai-Thinker）嵌入式产品 C 语言编码规范"
+    }
+  ]
+}
