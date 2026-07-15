@@ -1,10 +1,6 @@
 pipeline {
     agent any
 
-    environment {
-        GITHUB_TOKEN = credentials('github-token')
-    }
-
     stages {
         stage('Setup Node.js') {
             steps {
@@ -34,10 +30,12 @@ pipeline {
                 branch 'master'
             }
             steps {
-                sh '''
-                    git remote set-url --push origin "https://${GITHUB_TOKEN}@github.com/Ai-Thinker-Open/skills.git"
-                    git push origin master
-                '''
+                withCredentials([string(credentialsId: 'github-token', variable: 'TOKEN')]) {
+                    sh '''
+                        git remote set-url --push origin "https://${TOKEN}@github.com/Ai-Thinker-Open/skills.git"
+                        git push origin master
+                    '''
+                }
             }
         }
 
@@ -46,9 +44,9 @@ pipeline {
                 tag pattern: "v\\d+\\.\\d+\\.\\d+", comparator: "REGEXP"
             }
             steps {
-                script {
+                withCredentials([string(credentialsId: 'github-token', variable: 'TOKEN')]) {
                     sh '''
-                        echo "${GITHUB_TOKEN}" | gh auth login --with-token
+                        echo "${TOKEN}" | gh auth login --with-token
                         gh release create "${TAG_NAME}" \
                             --repo "Ai-Thinker-Open/skills" \
                             --title "Release ${TAG_NAME}" \
