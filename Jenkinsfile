@@ -1,10 +1,6 @@
 pipeline {
     agent any
 
-    triggers {
-        push(branch: 'master')
-    }
-
     environment {
         GITHUB_TOKEN = credentials('github-token')
     }
@@ -51,9 +47,6 @@ pipeline {
             }
             steps {
                 script {
-                    def VERSION = env.TAG_NAME.replace('v', '')
-                    echo "Releasing version: ${VERSION}"
-
                     sh '''
                         echo "${GITHUB_TOKEN}" | gh auth login --with-token
                         gh release create "${TAG_NAME}" \
