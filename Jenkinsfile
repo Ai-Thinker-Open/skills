@@ -6,7 +6,7 @@ pipeline {
             steps {
                 sh '''
                     cd /root/workspace
-                    git clone git@e.coding.net:axk/anxinkeskill/skills.git .
+                    git clone $CI_GIT_SSH_URL .
                 '''
             }
         }
