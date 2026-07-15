@@ -6,16 +6,22 @@ A cross-platform collection of AI agent skills, supporting MiMoCode, Claude Code
 
 ## Quick Start
 
-### Clone the Repository
+### Method 0: Using npx (Recommended)
+
+```bash
+# Install all skills
+npx skills add Ai-Thinker-Open/skills
+
+# Install specific skill
+npx skills add Ai-Thinker-Open/skills --skill ai-thinker-c-coding-standard
+```
+
+### Method 1: Clone and Copy
 
 ```bash
 git clone git@github.com:Ai-Thinker-Open/skills.git
 cd skills
-```
 
-### Copy Skills to Your Agent
-
-```bash
 # For Claude Code
 cp -r skills/ai-thinker-c-coding-standard ~/.claude/skills/
 
@@ -24,6 +30,15 @@ cp -r skills/ai-thinker-c-coding-standard ~/.opencode/skills/
 
 # For project-level usage
 cp -r skills/ai-thinker-c-coding-standard ./<agent>/skills/
+```
+
+### Method 2: Symlink (Recommended for Development)
+
+```bash
+git clone git@github.com:Ai-Thinker-Open/skills.git
+cd skills
+
+ln -s $(pwd)/skills/ai-thinker-c-coding-standard ~/.claude/skills/ai-thinker-c-coding-standard
 ```
 
 ## Available Skills

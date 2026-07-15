@@ -6,16 +6,22 @@
 
 ## 快速开始
 
-### 克隆仓库
+### 方法 0：使用 npx（推荐）
+
+```bash
+# 安装所有 skills
+npx skills add Ai-Thinker-Open/skills
+
+# 安装指定 skill
+npx skills add Ai-Thinker-Open/skills --skill ai-thinker-c-coding-standard
+```
+
+### 方法 1：克隆并复制
 
 ```bash
 git clone git@github.com:Ai-Thinker-Open/skills.git
 cd skills
-```
 
-### 复制 Skills 到你的 Agent
-
-```bash
 # Claude Code
 cp -r skills/ai-thinker-c-coding-standard ~/.claude/skills/
 
@@ -24,6 +30,15 @@ cp -r skills/ai-thinker-c-coding-standard ~/.opencode/skills/
 
 # 项目级别使用
 cp -r skills/ai-thinker-c-coding-standard ./<agent>/skills/
+```
+
+### 方法 2：符号链接（推荐用于开发）
+
+```bash
+git clone git@github.com:Ai-Thinker-Open/skills.git
+cd skills
+
+ln -s $(pwd)/skills/ai-thinker-c-coding-standard ~/.claude/skills/ai-thinker-c-coding-standard
 ```
 
 ## 可用 Skills
