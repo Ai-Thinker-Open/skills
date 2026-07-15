@@ -1,18 +1,11 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'node:18-slim'
+        }
+    }
 
     stages {
-        stage('Setup Node.js') {
-            steps {
-                sh '''
-                    curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
-                    apt-get install -y nodejs
-                    node --version
-                    npm --version
-                '''
-            }
-        }
-
         stage('Validate') {
             steps {
                 sh 'npm run validate'
@@ -32,6 +25,7 @@ pipeline {
             steps {
                 withCredentials([string(credentialsId: 'github-token', variable: 'TOKEN')]) {
                     sh '''
+                        apt-get update && apt-get install -y git
                         git remote set-url --push origin "https://${TOKEN}@github.com/Ai-Thinker-Open/skills.git"
                         git push origin master
                     '''
@@ -46,6 +40,7 @@ pipeline {
             steps {
                 withCredentials([string(credentialsId: 'github-token', variable: 'TOKEN')]) {
                     sh '''
+                        apt-get update && apt-get install -y gh
                         echo "${TOKEN}" | gh auth login --with-token
                         gh release create "${TAG_NAME}" \
                             --repo "Ai-Thinker-Open/skills" \
