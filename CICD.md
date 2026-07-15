@@ -25,8 +25,8 @@
 ### 第 1 步：安装 Node.js 18
 
 ```bash
-curl -fsSL https://nodejs.org/dist/v18.20.4/node-v18.20.4-linux-x64.tar.xz | tar -xJ
-export PATH=$PWD/node-v18.20.4-linux-x64/bin:$PATH
+curl -fsSL https://nodejs.org/dist/v18.12.1/node-v18.12.1-linux-x64.tar.xz | tar -xJ
+export PATH=$PWD/node-v18.12.1-linux-x64/bin:$PATH
 node --version
 npm --version
 ```
@@ -34,7 +34,7 @@ npm --version
 ### 第 2 步：验证 Skills
 
 ```bash
-export PATH=$PWD/node-v18.20.4-linux-x64/bin:$PATH
+export PATH=$PWD/node-v18.12.1-linux-x64/bin:$PATH
 npm run validate
 ```
 
@@ -49,7 +49,7 @@ All skills are valid
 ### 第 3 步：构建
 
 ```bash
-export PATH=$PWD/node-v18.20.4-linux-x64/bin:$PATH
+export PATH=$PWD/node-v18.12.1-linux-x64/bin:$PATH
 npm run build
 ```
 
@@ -65,7 +65,7 @@ git push origin master
 如果需要发布 Release，创建另一个构建计划，配置 tag 触发（`v*`），步骤如下：
 
 ```bash
-export PATH=$PWD/node-v18.20.4-linux-x64/bin:$PATH
+export PATH=$PWD/node-v18.12.1-linux-x64/bin:$PATH
 npm install -g gh
 echo "${GITHUB_TOKEN}" | gh auth login --with-token
 gh release create "${GIT_TAG_NAME}" \
