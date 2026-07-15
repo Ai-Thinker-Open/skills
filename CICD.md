@@ -22,13 +22,11 @@
 
 ## 构建步骤
 
-### 第 1 步：安装 Node.js 16
-
-> Coding CI 默认环境无 Node.js，且系统 GLIBC 版本低（2.23），不支持 Node.js 18+，需下载兼容版本。
+### 第 1 步：安装 Node.js 18
 
 ```bash
-curl -fsSL https://nodejs.org/dist/v16.20.2/node-v16.20.2-linux-x64.tar.xz | tar -xJ
-export PATH=$PWD/node-v16.20.2-linux-x64/bin:$PATH
+curl -fsSL https://nodejs.org/dist/v18.20.4/node-v18.20.4-linux-x64.tar.xz | tar -xJ
+export PATH=$PWD/node-v18.20.4-linux-x64/bin:$PATH
 node --version
 npm --version
 ```
@@ -36,7 +34,7 @@ npm --version
 ### 第 2 步：验证 Skills
 
 ```bash
-export PATH=$PWD/node-v16.20.2-linux-x64/bin:$PATH
+export PATH=$PWD/node-v18.20.4-linux-x64/bin:$PATH
 npm run validate
 ```
 
@@ -51,7 +49,7 @@ All skills are valid
 ### 第 3 步：构建
 
 ```bash
-export PATH=$PWD/node-v16.20.2-linux-x64/bin:$PATH
+export PATH=$PWD/node-v18.20.4-linux-x64/bin:$PATH
 npm run build
 ```
 
@@ -67,7 +65,7 @@ git push origin master
 如果需要发布 Release，创建另一个构建计划，配置 tag 触发（`v*`），步骤如下：
 
 ```bash
-export PATH=$PWD/node-v16.20.2-linux-x64/bin:$PATH
+export PATH=$PWD/node-v18.20.4-linux-x64/bin:$PATH
 npm install -g gh
 echo "${GITHUB_TOKEN}" | gh auth login --with-token
 gh release create "${GIT_TAG_NAME}" \
@@ -85,14 +83,6 @@ gh release create "${GIT_TAG_NAME}" \
 | 发布 | 推送 `v*` 标签 | 创建 GitHub Release |
 
 ## 常见问题
-
-### GLIBC 版本过低
-
-错误：`node: /lib/x86_64-linux-gnu/libm.so.6: version 'GLIBC_2.27' not found`
-
-原因：Coding CI 默认环境是 Ubuntu 16.04（GLIBC 2.23），Node.js 18+ 需要 GLIBC 2.28。
-
-解决：使用 Node.js 16（仅需 GLIBC 2.17）。
 
 ### Docker 不可用
 
