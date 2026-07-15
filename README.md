@@ -2,30 +2,28 @@
 
 A cross-platform collection of AI agent skills, supporting MiMoCode, Claude Code, Codex, Cursor, and 69+ other platforms.
 
-[![skills.sh](https://skills.sh/b/seahi/skills)](https://skills.sh/seahi/skills)
+> **Note:** This repository is mirrored to GitHub for easy installation. The `npx skills add` command works with the GitHub repository.
 
 ## Quick Start
 
-### Install All Skills
+### Clone the Repository
 
 ```bash
-npx skills add seahi/skills
+git clone git@github.com:Ai-Thinker-Open/skills.git
+cd skills
 ```
 
-### Install Specific Skills
+### Copy Skills to Your Agent
 
 ```bash
-npx skills add seahi/skills --skill ai-thinker-c-coding-standard
-```
+# For Claude Code
+cp -r skills/ai-thinker-c-coding-standard ~/.claude/skills/
 
-### Use Without Installing
+# For MiMoCode / OpenCode
+cp -r skills/ai-thinker-c-coding-standard ~/.opencode/skills/
 
-```bash
-# Pipe to an agent
-npx skills use seahi/skills@ai-thinker-c-coding-standard | claude
-
-# Start agent interactively
-npx skills use seahi/skills --skill ai-thinker-c-coding-standard --agent claude-code
+# For project-level usage
+cp -r skills/ai-thinker-c-coding-standard ./<agent>/skills/
 ```
 
 ## Available Skills
@@ -221,49 +219,57 @@ skills/
         └── template.html
 ```
 
-## Installation Options
+## Installation
+
+### Method 0: Using npx (Recommended)
+
+```bash
+# Install a specific skill
+npx skills add Ai-Thinker-Open/skills/skills/ai-thinker-c-coding-standard
+
+# Or clone the entire repository
+git clone git@github.com:Ai-Thinker-Open/skills.git
+cd skills
+```
+
+### Method 1: Clone and Copy
+
+```bash
+# Clone the repository
+git clone git@github.com:Ai-Thinker-Open/skills.git
+cd skills
+
+# Copy specific skill to Claude Code (global)
+cp -r skills/ai-thinker-c-coding-standard ~/.claude/skills/
+
+# Copy specific skill to MiMoCode (global)
+cp -r skills/ai-thinker-c-coding-standard ~/.opencode/skills/
+
+# Copy to project directory (project-level)
+mkdir -p .claude/skills
+cp -r skills/ai-thinker-c-coding-standard .claude/skills/
+```
+
+### Method 2: Symlink (Recommended for Development)
+
+```bash
+# Clone the repository
+git clone git@github.com:Ai-Thinker-Open/skills.git
+cd skills
+
+# Create symlinks for all skills
+ln -s $(pwd)/skills/ai-thinker-c-coding-standard ~/.claude/skills/ai-thinker-c-coding-standard
+ln -s $(pwd)/skills/embedded-code-review ~/.claude/skills/embedded-code-review
+ln -s $(pwd)/skills/coder-ai-m62-m61 ~/.claude/skills/coder-ai-m62-m61
+ln -s $(pwd)/skills/coder-ai-wb2 ~/.claude/skills/coder-ai-wb2
+```
 
 ### Scope
 
-| Scope | Flag | Location | Use Case |
-|-------|------|----------|----------|
-| **Project** | (default) | `./<agent>/skills/` | Committed with your project, shared with team |
-| **Global** | `-g` | `~/<agent>/skills/` | Available across all projects |
-
-### Installation Methods
-
-| Method | Description |
-|--------|-------------|
-| **Symlink** (Recommended) | Creates symlinks from each agent to a canonical copy. Single source of truth, easy updates. |
-| **Copy** | Creates independent copies for each agent. Use when symlinks aren't supported. |
-
-### Common Commands
-
-```bash
-# List available skills in a repository
-npx skills add seahi/skills --list
-
-# Install to specific agents
-npx skills add seahi/skills -a claude-code -a opencode
-
-# Install globally
-npx skills add seahi/skills -g
-
-# Non-interactive installation (CI/CD)
-npx skills add seahi/skills --skill ai-thinker-c-coding-standard -g -a claude-code -y
-
-# Install all skills to all agents
-npx skills add seahi/skills --all
-
-# List installed skills
-npx skills list
-
-# Update installed skills
-npx skills update
-
-# Remove installed skills
-npx skills remove my-skill
-```
+| Scope | Location | Use Case |
+|-------|----------|----------|
+| **Global** | `~/.<agent>/skills/` | Available across all projects |
+| **Project** | `./<agent>/skills/` | Committed with your project, shared with team |
 
 ## Supported Platforms
 
@@ -300,39 +306,18 @@ node bin/cli.js list
 
 ### Releasing
 
-When you push a version tag, GitHub Actions will:
-
-1. Validate all skills
-2. Build the package
-3. Create a GitHub Release with build artifacts
-
-#### Quick Release (Recommended)
-
 ```bash
 # Bump patch version (0.0.1 -> 0.0.2)
-./scripts/release.sh patch
-
-# Bump minor version (0.0.1 -> 0.1.0)
-./scripts/release.sh minor
-
-# Bump major version (0.0.1 -> 1.0.0)
-./scripts/release.sh major
-```
-
-#### Manual Release
-
-```bash
-# 1. Update version in package.json
 npm version patch --no-git-tag-version
 
-# 2. Commit changes
+# Commit changes
 git add package.json
 git commit -m "chore: release v0.0.2"
 
-# 3. Create tag
+# Create tag
 git tag -a v0.0.2 -m "Release v0.0.2"
 
-# 4. Push
+# Push
 git push origin main --tags
 ```
 
@@ -344,7 +329,6 @@ git push origin main --tags
 |------|----------|------|
 | validate | 所有推送 | 验证 SKILL.md 格式 |
 | build | 所有推送 | 构建 dist/ 目录 |
-| release | 推送 `v*` 标签 | 创建 GitHub Release |
 
 ## License
 

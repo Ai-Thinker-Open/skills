@@ -2,30 +2,28 @@
 
 跨平台通用的 AI Agent Skills 集合，支持 MiMoCode、Claude Code、Codex、Cursor 等 69+ 平台。
 
-[![skills.sh](https://skills.sh/b/seahi/skills)](https://skills.sh/seahi/skills)
+> **注意：** 本仓库已同步到 GitHub 以便安装。`npx skills add` 命令可直接使用 GitHub 仓库。
 
 ## 快速开始
 
-### 安装所有 Skills
+### 克隆仓库
 
 ```bash
-npx skills add seahi/skills
+git clone git@github.com:Ai-Thinker-Open/skills.git
+cd skills
 ```
 
-### 安装指定 Skills
+### 复制 Skills 到你的 Agent
 
 ```bash
-npx skills add seahi/skills --skill ai-thinker-c-coding-standard
-```
+# Claude Code
+cp -r skills/ai-thinker-c-coding-standard ~/.claude/skills/
 
-### 无需安装直接使用
+# MiMoCode / OpenCode
+cp -r skills/ai-thinker-c-coding-standard ~/.opencode/skills/
 
-```bash
-# 通过管道传递给 agent
-npx skills use seahi/skills@ai-thinker-c-coding-standard | claude
-
-# 交互式启动 agent
-npx skills use seahi/skills --skill ai-thinker-c-coding-standard --agent claude-code
+# 项目级别使用
+cp -r skills/ai-thinker-c-coding-standard ./<agent>/skills/
 ```
 
 ## 可用 Skills
@@ -235,49 +233,57 @@ mkdir skills/my-new-skill/assets     # 输出中使用的文件
 | `description` | 是 | 简要说明 skill 的功能和使用场景 |
 | `metadata.internal` | 否 | 设为 `true` 可从常规发现中隐藏 |
 
-## 安装选项
+## 安装
+
+### 方法 0：使用 npx（推荐）
+
+```bash
+# 安装指定 skill
+npx skills add Ai-Thinker-Open/skills/skills/ai-thinker-c-coding-standard
+
+# 或克隆整个仓库
+git clone git@github.com:Ai-Thinker-Open/skills.git
+cd skills
+```
+
+### 方法 1：克隆并复制
+
+```bash
+# 克隆仓库
+git clone git@github.com:Ai-Thinker-Open/skills.git
+cd skills
+
+# 复制指定 skill 到 Claude Code（全局）
+cp -r skills/ai-thinker-c-coding-standard ~/.claude/skills/
+
+# 复制指定 skill 到 MiMoCode（全局）
+cp -r skills/ai-thinker-c-coding-standard ~/.opencode/skills/
+
+# 复制到项目目录（项目级别）
+mkdir -p .claude/skills
+cp -r skills/ai-thinker-c-coding-standard .claude/skills/
+```
+
+### 方法 2：符号链接（推荐用于开发）
+
+```bash
+# 克隆仓库
+git clone git@github.com:Ai-Thinker-Open/skills.git
+cd skills
+
+# 为所有 skills 创建符号链接
+ln -s $(pwd)/skills/ai-thinker-c-coding-standard ~/.claude/skills/ai-thinker-c-coding-standard
+ln -s $(pwd)/skills/embedded-code-review ~/.claude/skills/embedded-code-review
+ln -s $(pwd)/skills/coder-ai-m62-m61 ~/.claude/skills/coder-ai-m62-m61
+ln -s $(pwd)/skills/coder-ai-wb2 ~/.claude/skills/coder-ai-wb2
+```
 
 ### 安装范围
 
-| 范围 | 标志 | 位置 | 使用场景 |
-|------|------|------|----------|
-| **项目** | （默认） | `./<agent>/skills/` | 随项目提交，团队共享 |
-| **全局** | `-g` | `~/<agent>/skills/` | 所有项目可用 |
-
-### 安装方式
-
-| 方式 | 说明 |
-|------|------|
-| **符号链接**（推荐） | 为每个 agent 创建指向规范副本的符号链接。单一事实来源，易于更新。 |
-| **复制** | 为每个 agent 创建独立副本。符号链接不支持时使用。 |
-
-### 常用命令
-
-```bash
-# 列出仓库中可用的 skills
-npx skills add seahi/skills --list
-
-# 安装到指定 agents
-npx skills add seahi/skills -a claude-code -a opencode
-
-# 全局安装
-npx skills add seahi/skills -g
-
-# 非交互式安装（CI/CD）
-npx skills add seahi/skills --skill ai-thinker-c-coding-standard -g -a claude-code -y
-
-# 安装所有 skills 到所有 agents
-npx skills add seahi/skills --all
-
-# 列出已安装的 skills
-npx skills list
-
-# 更新已安装的 skills
-npx skills update
-
-# 移除已安装的 skills
-npx skills remove my-skill
-```
+| 范围 | 位置 | 使用场景 |
+|------|------|----------|
+| **全局** | `~/.<agent>/skills/` | 所有项目可用 |
+| **项目** | `./<agent>/skills/` | 随项目提交，团队共享 |
 
 ## 支持的平台
 
@@ -314,39 +320,18 @@ node bin/cli.js list
 
 ### 发布
 
-当你推送版本标签时，GitHub Actions 会：
-
-1. 验证所有 skills
-2. 构建包
-3. 创建 GitHub Release 并附带构建产物
-
-#### 快速发布（推荐）
-
 ```bash
 # 补丁版本 (0.0.1 -> 0.0.2)
-./scripts/release.sh patch
-
-# 次版本 (0.0.1 -> 0.1.0)
-./scripts/release.sh minor
-
-# 主版本 (0.0.1 -> 1.0.0)
-./scripts/release.sh major
-```
-
-#### 手动发布
-
-```bash
-# 1. 更新 package.json 版本
 npm version patch --no-git-tag-version
 
-# 2. 提交更改
+# 提交更改
 git add package.json
 git commit -m "chore: release v0.0.2"
 
-# 3. 创建标签
+# 创建标签
 git tag -a v0.0.2 -m "Release v0.0.2"
 
-# 4. 推送
+# 推送
 git push origin main --tags
 ```
 
@@ -358,7 +343,6 @@ git push origin main --tags
 |------|----------|------|
 | validate | 所有推送 | 验证 SKILL.md 格式 |
 | build | 所有推送 | 构建 dist/ 目录 |
-| release | 推送 `v*` 标签 | 创建 GitHub Release |
 
 ## 许可证
 

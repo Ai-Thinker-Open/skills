@@ -1,6 +1,6 @@
 {
   "name": "seahi-skills",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Cross-platform AI Agent Skills collection for MiMoCode, Claude Code, Codex, Cursor and 69+ platforms",
   "type": "module",
   "keywords": [
@@ -12,11 +12,11 @@
     "cursor",
     "skills"
   ],
-  "author": "Seahi",
+  "author": "Ai-Thinker",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/seahi/skills.git"
+    "url": "https://github.com/Ai-Thinker-Open/skills.git"
   },
   "engines": {
     "node": ">=18"
