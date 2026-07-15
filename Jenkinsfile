@@ -1,28 +1,29 @@
 pipeline {
-    agent {
-        docker {
-            image 'public/docker/nodejs:18'
-            registryUrl 'https://coding-public-docker.pkg.coding.net'
-        }
-    }
+    agent any
 
     stages {
-        stage('Debug') {
+        stage('Setup Node.js 16') {
             steps {
-                sh 'pwd && ls -la && find / -name "package.json" -maxdepth 4 2>/dev/null'
+                sh 'curl -fsSL https://nodejs.org/dist/v16.20.2/node-v16.20.2-linux-x64.tar.xz | tar -xJ'
             }
         }
 
         stage('Validate') {
             steps {
-                sh 'node --version && npm --version'
-                sh 'npm run validate'
+                sh '''
+                    export PATH=$PWD/node-v16.20.2-linux-x64/bin:$PATH
+                    node --version && npm --version
+                    npm run validate
+                '''
             }
         }
 
         stage('Build') {
             steps {
-                sh 'npm run build'
+                sh '''
+                    export PATH=$PWD/node-v16.20.2-linux-x64/bin:$PATH
+                    npm run build
+                '''
             }
         }
 
@@ -30,6 +31,7 @@ pipeline {
             steps {
                 withCredentials([string(credentialsId: 'github-token', variable: 'TOKEN')]) {
                     sh '''
+                        export PATH=$PWD/node-v16.20.2-linux-x64/bin:$PATH
                         git remote set-url --push origin "https://${TOKEN}@github.com/Ai-Thinker-Open/skills.git"
                         git push origin master
                     '''
