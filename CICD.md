@@ -53,7 +53,8 @@ npm run build
 ```bash
 export PATH=$PWD/node-v18.12.1-linux-x64/bin:$PATH
 git remote set-url --push origin "https://${GITHUB_TOKEN}@github.com/Ai-Thinker-Open/skills.git"
-git push origin master
+git branch -a
+git push origin HEAD:master
 ```
 
 ### 第 5 步：发布（仅 tag 触发时）
