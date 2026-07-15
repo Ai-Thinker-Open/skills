@@ -5,9 +5,10 @@ pipeline {
         stage('Setup') {
             steps {
                 sh '''
+                    #!/bin/bash
                     curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
                     export NVM_DIR="$HOME/.nvm"
-                    [ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh"
+                    [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
                     nvm install 18
                     node --version
                     npm --version
@@ -18,8 +19,9 @@ pipeline {
         stage('Validate') {
             steps {
                 sh '''
+                    #!/bin/bash
                     export NVM_DIR="$HOME/.nvm"
-                    [ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh"
+                    [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
                     npm run validate
                 '''
             }
@@ -28,8 +30,9 @@ pipeline {
         stage('Build') {
             steps {
                 sh '''
+                    #!/bin/bash
                     export NVM_DIR="$HOME/.nvm"
-                    [ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh"
+                    [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
                     npm run build
                 '''
             }
@@ -42,8 +45,9 @@ pipeline {
             steps {
                 withCredentials([string(credentialsId: 'github-token', variable: 'TOKEN')]) {
                     sh '''
+                        #!/bin/bash
                         export NVM_DIR="$HOME/.nvm"
-                        [ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh"
+                        [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
                         git remote set-url --push origin "https://${TOKEN}@github.com/Ai-Thinker-Open/skills.git"
                         git push origin master
                     '''
@@ -58,8 +62,9 @@ pipeline {
             steps {
                 withCredentials([string(credentialsId: 'github-token', variable: 'TOKEN')]) {
                     sh '''
+                        #!/bin/bash
                         export NVM_DIR="$HOME/.nvm"
-                        [ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh"
+                        [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
                         npm install -g gh
                         echo "${TOKEN}" | gh auth login --with-token
                         gh release create "${TAG_NAME}" \
