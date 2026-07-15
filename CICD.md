@@ -2,6 +2,8 @@
 
 本项目使用 Coding CI 的可视化构建流程（非 Jenkinsfile），自动验证、构建并同步到 GitHub。
 
+> **重要**：可视化编排中每个步骤是独立 shell，环境变量不跨步骤传递。每个步骤都需要单独设置 `PATH`。
+
 ## 构建计划配置
 
 ### 基本信息
@@ -19,6 +21,7 @@
 | 变量名 | 值 | 说明 |
 |--------|-----|------|
 | `GITHUB_TOKEN` | 你的 GitHub PAT | 用于推送到 GitHub |
+| `NODE_VERSION` | `v18.12.1` | Node.js 版本（方便后续修改） |
 
 ## 构建步骤
 
@@ -38,14 +41,6 @@ export PATH=$PWD/node-v18.12.1-linux-x64/bin:$PATH
 npm run validate
 ```
 
-预期输出：
-```
-Validating skills...
-✅ skills/xxx/SKILL.md
-Found N skill(s)
-All skills are valid
-```
-
 ### 第 3 步：构建
 
 ```bash
@@ -56,6 +51,7 @@ npm run build
 ### 第 4 步：同步到 GitHub
 
 ```bash
+export PATH=$PWD/node-v18.12.1-linux-x64/bin:$PATH
 git remote set-url --push origin "https://${GITHUB_TOKEN}@github.com/Ai-Thinker-Open/skills.git"
 git push origin master
 ```
@@ -83,6 +79,14 @@ gh release create "${GIT_TAG_NAME}" \
 | 发布 | 推送 `v*` 标签 | 创建 GitHub Release |
 
 ## 常见问题
+
+### command not found
+
+错误：`npm: not found`
+
+原因：可视化编排每个步骤是独立 shell，`export PATH` 不会跨步骤传递。
+
+解决：在**每个步骤**开头都加上 `export PATH=$PWD/node-v18.12.1-linux-x64/bin:$PATH`。
 
 ### Docker 不可用
 
