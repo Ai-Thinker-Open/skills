@@ -1,20 +1,37 @@
 pipeline {
-    agent {
-        docker {
-            image 'node:18-slim'
-        }
-    }
+    agent any
 
     stages {
+        stage('Setup') {
+            steps {
+                sh '''
+                    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+                    export NVM_DIR="$HOME/.nvm"
+                    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+                    nvm install 18
+                    node --version
+                    npm --version
+                '''
+            }
+        }
+
         stage('Validate') {
             steps {
-                sh 'npm run validate'
+                sh '''
+                    export NVM_DIR="$HOME/.nvm"
+                    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+                    npm run validate
+                '''
             }
         }
 
         stage('Build') {
             steps {
-                sh 'npm run build'
+                sh '''
+                    export NVM_DIR="$HOME/.nvm"
+                    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+                    npm run build
+                '''
             }
         }
 
@@ -25,7 +42,8 @@ pipeline {
             steps {
                 withCredentials([string(credentialsId: 'github-token', variable: 'TOKEN')]) {
                     sh '''
-                        apt-get update && apt-get install -y git
+                        export NVM_DIR="$HOME/.nvm"
+                        [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
                         git remote set-url --push origin "https://${TOKEN}@github.com/Ai-Thinker-Open/skills.git"
                         git push origin master
                     '''
@@ -40,7 +58,9 @@ pipeline {
             steps {
                 withCredentials([string(credentialsId: 'github-token', variable: 'TOKEN')]) {
                     sh '''
-                        apt-get update && apt-get install -y gh
+                        export NVM_DIR="$HOME/.nvm"
+                        [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+                        npm install -g gh
                         echo "${TOKEN}" | gh auth login --with-token
                         gh release create "${TAG_NAME}" \
                             --repo "Ai-Thinker-Open/skills" \
