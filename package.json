@@ -19,7 +19,7 @@
     "url": "https://github.com/Ai-Thinker-Open/skills.git"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=16"
   },
   "files": [
     "skills/",
