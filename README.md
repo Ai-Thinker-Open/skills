@@ -1,6 +1,6 @@
 # Agent Skills Collection
 
-A cross-platform collection of AI agent skills, supporting MiMoCode, Claude Code, Codex, Cursor, and 69+ other platforms.
+A cross-platform collection of AI agent skills, supporting MiMoCode, Claude Code, Codex, Cursor, and 70+ other platforms.
 
 > **Note:** This repository is mirrored to GitHub for easy installation. The `npx skills add` command works with the GitHub repository.
 
@@ -49,6 +49,7 @@ ln -s $(pwd)/skills/ai-thinker-c-coding-standard ~/.claude/skills/ai-thinker-c-c
 | [embedded-code-review](./skills/embedded-code-review) | Ai-Thinker embedded C deep code review |
 | [coder-ai-m62-m61](./skills/coder-ai-m62-m61) | BL616/BL618 development guide (Wi-Fi 6 + BLE 5.0) |
 | [coder-ai-wb2](./skills/coder-ai-wb2) | Ai-WB2/BL602 development guide (Wi-Fi 4 + BLE 5.0) |
+| [add-scbb-module](./skills/add-scbb-module) | Guide for adding new peripheral driver modules to AiPi-SCBB |
 | [add-skills](./skills/add-skills) | Guide for adding new skills to this repo |
 
 ### ai-thinker-c-coding-standard
@@ -88,6 +89,16 @@ Ai-Thinker Ai-WB2 series module development guide (BL602 chip) - Wi-Fi 4 + BLE 5
 - Developing with Ai-WB2 modules
 - Peripheral programming (GPIO, UART, PWM, ADC)
 - MQTT, HTTP network protocols
+
+### add-scbb-module
+
+Guide for adding new peripheral driver modules to the AiPi-SCBB library. Follows the `AXK_<module>_<protocol>_ACLL` macro pattern and Ai-Thinker C coding standard.
+
+**Use cases:**
+- Adding new peripheral drivers to SCBB framework
+- Creating I2C, UART, SPI, PWM+DMA, or GPIO modules
+- Following SCBB naming conventions and macro patterns
+- Integrating BSP functions with SCBB abstraction layer
 
 ### add-skills
 
@@ -277,6 +288,8 @@ ln -s $(pwd)/skills/ai-thinker-c-coding-standard ~/.claude/skills/ai-thinker-c-c
 ln -s $(pwd)/skills/embedded-code-review ~/.claude/skills/embedded-code-review
 ln -s $(pwd)/skills/coder-ai-m62-m61 ~/.claude/skills/coder-ai-m62-m61
 ln -s $(pwd)/skills/coder-ai-wb2 ~/.claude/skills/coder-ai-wb2
+ln -s $(pwd)/skills/add-scbb-module ~/.claude/skills/add-scbb-module
+ln -s $(pwd)/skills/add-skills ~/.claude/skills/add-skills
 ```
 
 ### Scope
