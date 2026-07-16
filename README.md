@@ -127,7 +127,7 @@ skills/
 │   ├── build.mjs                   # Build skills to dist/
 │   └── release.sh                  # Local release script
 ├── README.md                       # English documentation
-├── README.zh.md                    # 中文说明
+├── README.zh.md                    # Chinese documentation
 ├── package.json
 └── skills.sh.json                  # skills.sh discovery config
 ```
@@ -351,12 +351,12 @@ git push origin main --tags
 
 ### CI/CD
 
-项目使用 `.coding-ci.yml` 配置 Coding 平台的 CI/CD 流水线。
+Project uses `.coding-ci.yml` to configure Coding platform CI/CD pipeline.
 
-| 阶段 | 触发条件 | 说明 |
-|------|----------|------|
-| validate | 所有推送 | 验证 SKILL.md 格式 |
-| build | 所有推送 | 构建 dist/ 目录 |
+| Stage | Trigger | Description |
+|-------|---------|-------------|
+| validate | All pushes | Validate SKILL.md format |
+| build | All pushes | Build dist/ directory |
 
 ## License
 
