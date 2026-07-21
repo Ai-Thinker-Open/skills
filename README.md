@@ -2,11 +2,11 @@
 
 # Agent Skills Collection
 
+</div>
+
 [![中文](https://img.shields.io/badge/中文-README-blue)](README.zh.md)
 
 A cross-platform collection of AI agent skills, supporting MiMoCode, Claude Code, Codex, Cursor, and 70+ other platforms.
-
-</div>
 
 > **Note:** This repository is mirrored to GitHub for easy installation. The `npx skills add` command works with the GitHub repository.
 
