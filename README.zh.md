@@ -1,6 +1,12 @@
+<div align="center">
+
 # Agent Skills 集合
 
+[![English](https://img.shields.io/badge/English-README-blue)](README.md)
+
 跨平台通用的 AI Agent Skills 集合，支持 MiMoCode、Claude Code、Codex、Cursor 等 69+ 平台。
+
+</div>
 
 > **注意：** 本仓库已同步到 GitHub 以便安装。`npx skills add` 命令可直接使用 GitHub 仓库。
 
