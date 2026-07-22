@@ -57,6 +57,7 @@ ln -s $(pwd)/skills/ai-thinker-c-coding-standard ~/.claude/skills/ai-thinker-c-c
 | [coder-ai-wb2](./skills/coder-ai-wb2) | Ai-WB2/BL602 development guide (Wi-Fi 4 + BLE 5.0) |
 | [add-scbb-module](./skills/add-scbb-module) | Guide for adding new peripheral driver modules to AiPi-SCBB |
 | [add-skills](./skills/add-skills) | Guide for adding new skills to this repo |
+| [ota-generator](./skills/ota-generator) | Ai-Thinker embedded product OTA firmware generator |
 
 ### ai-thinker-c-coding-standard
 
@@ -114,6 +115,15 @@ Guide for adding new skills to this repository.
 - Creating a new skill
 - Learning skill format and structure
 - Validating skills
+
+### ota-generator
+
+Ai-Thinker embedded product OTA firmware generator. Supports two modes: add MD5 header to existing firmware, or compile from source and generate OTA package.
+
+**Use cases:**
+- Generating OTA upgrade firmware
+- Adding MD5 header to firmware files
+- Compiling from source to create OTA packages
 
 ## Repository Structure
 
