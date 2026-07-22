@@ -1,12 +1,12 @@
 <div align="center">
 
-# Agent Skills Collection
+# Ai-Thinker Skills
 
 </div>
 
 [![中文](https://img.shields.io/badge/中文-README-blue)](README.zh.md)
 
-A cross-platform collection of AI agent skills, supporting MiMoCode, Claude Code, Codex, Cursor, and 70+ other platforms.
+AI agent skills for Ai-Thinker embedded product development — coding standards, code review, chip development guides, and peripheral driver templates. Supports MiMoCode, Claude Code, Codex, Cursor, and 70+ other platforms.
 
 > **Note:** This repository is mirrored to GitHub for easy installation. The `npx skills add` command works with the GitHub repository.
 
