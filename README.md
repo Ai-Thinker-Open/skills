@@ -1,45 +1,44 @@
-# Ai-Thinker Skills
+<div align="center">
 
-为安信可（Ai-Thinker）嵌入式产品开发提供的一套 AI Agent 技能集，帮助开发者在编写、评审、重构嵌入式 C 代码时自动遵循安信可编码规范和开发最佳实践。
+# Agent Skills Collection
 
-本技能集覆盖：
+</div>
 
-- **编码规范** - 统一的 C 语言编码标准（命名、格式、注释、安全）
-- **代码评审** - 深度代码审查，包括内存安全、FreeRTOS 任务规范、ISR 合规性
-- **芯片开发指南** - BL616/BL618（Wi-Fi 6）、BL602/Ai-WB2（Wi-Fi 4）系列模块开发
-- **外设驱动** - AiPi-SCBB 外设驱动模块添加指南
+[![中文](https://img.shields.io/badge/中文-README-blue)](README.zh.md)
 
-支持 MiMoCode、Claude Code、Codex、Cursor 等 70+ 平台，遵循 [Agent Skills 规范](https://agentskills.io)。
+A cross-platform collection of AI agent skills, supporting MiMoCode, Claude Code, Codex, Cursor, and 70+ other platforms.
 
-## 安装
+> **Note:** This repository is mirrored to GitHub for easy installation. The `npx skills add` command works with the GitHub repository.
 
-### 方式 0：npx 一键安装（推荐）
+## Quick Start
+
+### Method 0: Using npx (Recommended)
 
 ```bash
-# 安装全部技能
+# Install all skills
 npx skills add Ai-Thinker-Open/skills
 
-# 安装单个技能
+# Install specific skill
 npx skills add Ai-Thinker-Open/skills --skill ai-thinker-c-coding-standard
 ```
 
-### 方式 1：克隆后复制
+### Method 1: Clone and Copy
 
 ```bash
 git clone git@github.com:Ai-Thinker-Open/skills.git
 cd skills
 
-# Claude Code
+# For Claude Code
 cp -r skills/ai-thinker-c-coding-standard ~/.claude/skills/
 
-# MiMoCode / OpenCode
+# For MiMoCode / OpenCode
 cp -r skills/ai-thinker-c-coding-standard ~/.opencode/skills/
 
-# 项目级别
+# For project-level usage
 cp -r skills/ai-thinker-c-coding-standard ./<agent>/skills/
 ```
 
-### 方式 2：符号链接（开发推荐）
+### Method 2: Symlink (Recommended for Development)
 
 ```bash
 git clone git@github.com:Ai-Thinker-Open/skills.git
@@ -48,114 +47,322 @@ cd skills
 ln -s $(pwd)/skills/ai-thinker-c-coding-standard ~/.claude/skills/ai-thinker-c-coding-standard
 ```
 
-### 安装范围
+## Available Skills
 
-| 范围 | 位置 | 用途 |
-|------|------|------|
-| **全局** | `~/.<agent>/skills/` | 所有项目可用 |
-| **项目** | `./<agent>/skills/` | 跟随项目，团队共享 |
-
-## 可用技能
-
-| 技能 | 说明 |
-|------|------|
-| [ai-thinker-c-coding-standard](./skills/ai-thinker-c-coding-standard) | 安信可嵌入式 C 编码规范 |
-| [embedded-code-review](./skills/embedded-code-review) | 安信可嵌入式 C 深度代码评审 |
-| [coder-ai-m62-m61](./skills/coder-ai-m62-m61) | BL616/BL618 开发指南（Wi-Fi 6 + BLE 5.0） |
-| [coder-ai-wb2](./skills/coder-ai-wb2) | Ai-WB2/BL602 开发指南（Wi-Fi 4 + BLE 5.0） |
-| [add-scbb-module](./skills/add-scbb-module) | AiPi-SCBB 外设驱动模块添加指南 |
-| [add-skills](./skills/add-skills) | 向本仓库添加新技能指南 |
-
-## 技能详情
+| Skill | Description |
+|-------|-------------|
+| [ai-thinker-c-coding-standard](./skills/ai-thinker-c-coding-standard) | Ai-Thinker embedded C coding standard |
+| [embedded-code-review](./skills/embedded-code-review) | Ai-Thinker embedded C deep code review |
+| [coder-ai-m62-m61](./skills/coder-ai-m62-m61) | BL616/BL618 development guide (Wi-Fi 6 + BLE 5.0) |
+| [coder-ai-wb2](./skills/coder-ai-wb2) | Ai-WB2/BL602 development guide (Wi-Fi 4 + BLE 5.0) |
+| [add-scbb-module](./skills/add-scbb-module) | Guide for adding new peripheral driver modules to AiPi-SCBB |
+| [add-skills](./skills/add-skills) | Guide for adding new skills to this repo |
 
 ### ai-thinker-c-coding-standard
 
-安信可嵌入式产品 C 语言编码规范。编写、修改、评审任何嵌入式 C 代码时自动遵循，包括：
+Ai-Thinker embedded product C coding standard. Use when writing, modifying, reviewing, or refactoring any embedded C code, or when generating .c/.h files, adding function header comments, or checking code standards.
 
-- 统一前缀 `axk` 命名规则
-- K&R 大括号风格，4 空格缩进
-- Doxygen 函数头注释
-- 参数校验与内存安全
-- `#include` 排序与文件组织
+**Use cases:**
+- Writing embedded C code
+- Reviewing code standards compliance
+- Generating Doxygen-style function headers
 
 ### embedded-code-review
 
-安信可嵌入式 C 深度代码评审，覆盖：
+Ai-Thinker embedded C deep code review skill. Covers safety, memory management, FreeRTOS task standards, ISR compliance, coding standard checks, and more.
 
-- 安全漏洞与内存越界检测
-- FreeRTOS 任务创建规范
-- 中断服务程序（ISR）合规性
-- 编码规范逐项核查
+**Use cases:**
+- Embedded code security audit
+- FreeRTOS task creation standards check
+- Memory leak/overflow risk detection
+- ISR compliance review
+- Coding standard checklist verification
 
 ### coder-ai-m62-m61
 
-BL616/BL618 系列模块开发指南（Wi-Fi 6 + BLE 5.0），基于 bouffalo_sdk：
+Ai-Thinker BL616/BL618 series module development guide - Wi-Fi 6 + BLE 5.0 module, based on bouffalo_sdk.
 
-- GPIO、UART、SPI、I2C、DMA 编程
-- Wi-Fi 和 BLE 连接
+**Use cases:**
+- Developing with BL616/BL618 modules
+- GPIO, UART, SPI, I2C, DMA programming
+- Wi-Fi and BLE connectivity
 
 ### coder-ai-wb2
 
-Ai-WB2/BL602 系列模块开发指南（Wi-Fi 4 + BLE 5.0）：
+Ai-Thinker Ai-WB2 series module development guide (BL602 chip) - Wi-Fi 4 + BLE 5.0 module.
 
-- 外设编程（GPIO、UART、PWM、ADC）
-- MQTT、HTTP 网络协议
+**Use cases:**
+- Developing with Ai-WB2 modules
+- Peripheral programming (GPIO, UART, PWM, ADC)
+- MQTT, HTTP network protocols
 
 ### add-scbb-module
 
-AiPi-SCBB 外设驱动模块添加指南，遵循 `AXK_<module>_<protocol>_ACLL` 宏模式。
+Guide for adding new peripheral driver modules to the AiPi-SCBB library. Follows the `AXK_<module>_<protocol>_ACLL` macro pattern and Ai-Thinker C coding standard.
 
-## 创建新技能
+**Use cases:**
+- Adding new peripheral drivers to SCBB framework
+- Creating I2C, UART, SPI, PWM+DMA, or GPIO modules
+- Following SCBB naming conventions and macro patterns
+- Integrating BSP functions with SCBB abstraction layer
 
-```bash
-cd skills/
-mkdir my-skill && cd my-skill
-```
+### add-skills
 
-创建 `SKILL.md`：
+Guide for adding new skills to this repository.
 
-```markdown
----
-name: my-skill
-description: 技能描述及触发条件。
----
+**Use cases:**
+- Creating a new skill
+- Learning skill format and structure
+- Validating skills
 
-# My Skill
-
-技能指令内容...
-```
-
-验证技能：
-
-```bash
-npm run validate
-```
-
-## 目录结构
+## Repository Structure
 
 ```
 skills/
-├── skills/                      # 所有技能
+├── skills/                          # All skills are stored here
 │   └── ai-thinker-c-coding-standard/
-│       ├── SKILL.md             # 技能主文件（必需）
-│       ├── scripts/             # 辅助脚本（可选）
-│       ├── references/          # 按需加载的文档（可选）
-│       └── assets/              # 输出使用的文件（可选）
-├── .github/workflows/           # GitHub Actions
-├── bin/                         # CLI 工具
-├── scripts/                     # 构建和发布脚本
-└── README.md
+│       ├── SKILL.md                # Skill main file (required)
+│       ├── scripts/                # Helper scripts (optional)
+│       ├── references/             # Documentation loaded on demand (optional)
+│       └── assets/                 # Files used in output (optional)
+├── .coding-ci.yml                  # Coding CI/CD configuration
+├── bin/                            # CLI tools
+│   └── cli.js                      # seahi-skills CLI
+├── scripts/                        # Build and release scripts
+│   ├── validate.mjs                # Validate SKILL.md files
+│   ├── build.mjs                   # Build skills to dist/
+│   └── release.sh                  # Local release script
+├── README.md                       # English documentation
+├── README.zh.md                    # Chinese documentation
+├── package.json
+└── skills.sh.json                  # skills.sh discovery config
 ```
 
-## 开发
+## Creating a New Skill
+
+### Step 1: Create the Skill Directory
 
 ```bash
-# 验证所有技能
+cd skills/
+mkdir my-new-skill
+cd my-new-skill
+```
+
+### Step 2: Create SKILL.md
+
+Create `SKILL.md` with YAML frontmatter. The `description` field is the primary trigger - agents use it to decide when to activate this skill.
+
+```markdown
+---
+name: my-new-skill
+description: What this skill does and when to use it. Include trigger phrases like "when user asks to X" or "for Y tasks".
+---
+
+# My Skill Title
+
+Instructions for the agent to follow when this skill is activated.
+
+## When to Use
+
+Describe the scenarios where this skill should be used.
+
+## Steps
+
+1. First, do this
+2. Then, do that
+```
+
+### Step 3: (Optional) Add Resource Directories
+
+```bash
+mkdir scripts    # Executable helper scripts (Python/Bash/Node)
+mkdir references # Documentation loaded on demand by the agent
+mkdir assets     # Templates, images, fonts used in output
+```
+
+### Step 4: Validate Your Skill
+
+```bash
+# From the repo root
+npm run validate
+```
+
+Expected output:
+```
+🔍 Validating skills...
+
+✅ skills/my-new-skill/SKILL.md
+
+📊 Found 2 skill(s)
+
+✅ All skills are valid
+```
+
+### Skill Frontmatter Fields
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| `name` | Yes | Unique identifier (lowercase, hyphens only) |
+| `description` | Yes | What the skill does + when to use it (this triggers activation) |
+| `metadata.internal` | No | Set `true` to hide from normal discovery |
+
+### Example: Complete Skill
+
+```
+skills/
+└── code-review/
+    ├── SKILL.md              # Main skill file
+    ├── scripts/
+    │   └── lint.sh           # Helper script
+    └── references/
+        └── style-guide.md    # Reference docs
+```
+
+`skills/code-review/SKILL.md`:
+```markdown
+---
+name: code-review
+description: Review code for quality, security, and best practices. Use when user asks to review, audit, or check code.
+---
+
+# Code Review Skill
+
+Review code changes following these guidelines.
+
+## Steps
+
+1. Check for security vulnerabilities
+2. Verify error handling
+3. Review naming conventions
+4. Suggest improvements
+```
+
+### Directory Structure Reference
+
+```
+skills/
+└── <skill-name>/                 # Skill name (lowercase, hyphens)
+    ├── SKILL.md                  # REQUIRED: Main skill file
+    ├── scripts/                  # OPTIONAL: Executable scripts
+    │   └── helper.py
+    ├── references/               # OPTIONAL: Docs loaded on demand
+    │   └── api-docs.md
+    └── assets/                   # OPTIONAL: Output templates/files
+        └── template.html
+```
+
+## Installation
+
+### Method 0: Using npx (Recommended)
+
+```bash
+# Install a specific skill
+npx skills add Ai-Thinker-Open/skills/skills/ai-thinker-c-coding-standard
+
+# Or clone the entire repository
+git clone git@github.com:Ai-Thinker-Open/skills.git
+cd skills
+```
+
+### Method 1: Clone and Copy
+
+```bash
+# Clone the repository
+git clone git@github.com:Ai-Thinker-Open/skills.git
+cd skills
+
+# Copy specific skill to Claude Code (global)
+cp -r skills/ai-thinker-c-coding-standard ~/.claude/skills/
+
+# Copy specific skill to MiMoCode (global)
+cp -r skills/ai-thinker-c-coding-standard ~/.opencode/skills/
+
+# Copy to project directory (project-level)
+mkdir -p .claude/skills
+cp -r skills/ai-thinker-c-coding-standard .claude/skills/
+```
+
+### Method 2: Symlink (Recommended for Development)
+
+```bash
+# Clone the repository
+git clone git@github.com:Ai-Thinker-Open/skills.git
+cd skills
+
+# Create symlinks for all skills
+ln -s $(pwd)/skills/ai-thinker-c-coding-standard ~/.claude/skills/ai-thinker-c-coding-standard
+ln -s $(pwd)/skills/embedded-code-review ~/.claude/skills/embedded-code-review
+ln -s $(pwd)/skills/coder-ai-m62-m61 ~/.claude/skills/coder-ai-m62-m61
+ln -s $(pwd)/skills/coder-ai-wb2 ~/.claude/skills/coder-ai-wb2
+ln -s $(pwd)/skills/add-scbb-module ~/.claude/skills/add-scbb-module
+ln -s $(pwd)/skills/add-skills ~/.claude/skills/add-skills
+```
+
+### Scope
+
+| Scope | Location | Use Case |
+|-------|----------|----------|
+| **Global** | `~/.<agent>/skills/` | Available across all projects |
+| **Project** | `./<agent>/skills/` | Committed with your project, shared with team |
+
+## Supported Platforms
+
+Skills follow the [Agent Skills specification](https://agentskills.io) and work with:
+
+| Platform | Agent Flag |
+|----------|------------|
+| MiMoCode | `opencode` |
+| Claude Code | `claude-code` |
+| Codex | `codex` |
+| Cursor | `cursor` |
+| OpenCode | `opencode` |
+| GitHub Copilot | `github-copilot` |
+| Gemini CLI | `gemini-cli` |
+| Windsurf | `windsurf` |
+| Cline | `cline` |
+| Roo Code | `roo` |
+| + 60 more | See [full list](https://agentskills.io#supported-agents) |
+
+## Development
+
+### Local Development
+
+```bash
+# Validate all skills
 npm run validate
 
-# 构建
+# Build skills to dist/
 npm run build
+
+# Run CLI
+node bin/cli.js list
 ```
+
+### Releasing
+
+```bash
+# Bump patch version (0.0.1 -> 0.0.2)
+npm version patch --no-git-tag-version
+
+# Commit changes
+git add package.json
+git commit -m "chore: release v0.0.2"
+
+# Create tag
+git tag -a v0.0.2 -m "Release v0.0.2"
+
+# Push
+git push origin main --tags
+```
+
+### CI/CD
+
+Project uses `.coding-ci.yml` to configure Coding platform CI/CD pipeline.
+
+| Stage | Trigger | Description |
+|-------|---------|-------------|
+| validate | All pushes | Validate SKILL.md format |
+| build | All pushes | Build dist/ directory |
 
 ## License
 
