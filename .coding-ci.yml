@@ -35,6 +35,16 @@ steps:
     bash: |
       npm run build
 
+  # 同步到 GitHub（仅 master 分支推送时）
+  - name: sync-to-github
+    if: git.ref == 'refs/heads/master' || git.ref == 'refs/heads/main'
+    bash: |
+      # 使用 Token 配置 remote
+      git remote set-url --push github "https://${GITHUB_TOKEN}@github.com/Ai-Thinker-Open/skills.git"
+
+      # 推送到 GitHub
+      git push github master
+
   # 发布 GitHub Release（仅 tag 触发时）
   - name: release
     if: startsWith(git.ref, 'refs/tags/v')
@@ -42,14 +52,12 @@ steps:
       VERSION=${GIT_REF#refs/tags/v}
       echo "Releasing version: $VERSION"
 
-      # 安装 gh CLI
-      curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
-      echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | tee /etc/apt/sources.list.d/github-cli.list > /dev/null
-      apt-get update
-      apt-get install gh -y
+      # 配置 gh CLI 认证
+      echo "$GITHUB_TOKEN" | gh auth login --with-token
 
       # 创建 Release
       gh release create "v${VERSION}" \
+        --repo "Ai-Thinker-Open/skills" \
         --title "Release v${VERSION}" \
         --generate-notes \
         dist/**/*
