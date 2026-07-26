@@ -55,6 +55,10 @@ ln -s $(pwd)/skills/ai-thinker-c-coding-standard ~/.claude/skills/ai-thinker-c-c
 | [embedded-code-review](./skills/embedded-code-review) | 安信可嵌入式 C 代码深度审查 |
 | [coder-ai-m62-m61](./skills/coder-ai-m62-m61) | BL616/BL618 开发指南 (Wi-Fi 6 + BLE 5.0) |
 | [coder-ai-wb2](./skills/coder-ai-wb2) | Ai-WB2/BL602 开发指南 (Wi-Fi 4 + BLE 5.0) |
+| [module-selector](./skills/module-selector) | 安信可模组选型助手（WiFi/LoRa/雷达/UWB/星闪） |
+| [scbb-module-finder](./skills/scbb-module-finder) | SCBB 模块查找器 |
+| [ota-generator](./skills/ota-generator) | OTA 固件生成器 |
+| [add-scbb-module](./skills/add-scbb-module) | 向 SCBB 库添加新模块 |
 | [add-skills](./skills/add-skills) | 向本仓库添加新 skill 的指南 |
 
 ### ai-thinker-c-coding-standard
@@ -95,6 +99,40 @@ ln -s $(pwd)/skills/ai-thinker-c-coding-standard ~/.claude/skills/ai-thinker-c-c
 - 外设编程 (GPIO、UART、PWM、ADC)
 - MQTT、HTTP 网络协议
 
+### module-selector
+
+安信可模组选型助手。支持 Wi-Fi、BLE、LoRa、雷达、UWB、星闪(NearLink)、NB-IoT 等全系列模组的选型推荐，包含规格书链接。
+
+**使用场景：**
+- 物联网模组选型
+- 传感器模块选择
+- 无线通信模组推荐
+
+### scbb-module-finder
+
+SCBB 模块查找器。从 AiPi-SCBB 仓库查找外设驱动模块，支持 I2C、UART、SPI、PWM+DMA 等协议。
+
+**使用场景：**
+- 查找传感器驱动
+- 获取外设模块代码
+- SCBB 框架集成
+
+### ota-generator
+
+OTA 固件生成器。支持模式A（添加MD5包头）和模式B（从源码编译）。
+
+**使用场景：**
+- 生成 OTA 升级固件
+- 嵌入式固件更新
+
+### add-scbb-module
+
+向 SCBB 库添加新模块的指南。
+
+**使用场景：**
+- 创建新的外设驱动
+- 移植模块到 SCBB 框架
+
 ### add-skills
 
 向本仓库添加新 skill 的指南。
@@ -120,6 +158,7 @@ skills/
 ├── scripts/                        # 构建和发布脚本
 │   ├── validate.mjs                # 验证 SKILL.md 文件
 │   ├── build.mjs                   # 构建 skills 到 dist/
+│   ├── install.mjs                 # 安装 skills 到用户目录
 │   └── release.sh                  # 本地发布脚本
 ├── README.md                       # English documentation
 ├── README.zh.md                    # 中文说明
@@ -334,6 +373,12 @@ npm run validate
 
 # 构建 skills 到 dist/
 npm run build
+
+# 安装 skills 到 ~/.claude/skills 和 ~/.codex/skills
+npm run install:all
+
+# 安装指定 skill
+node scripts/install.mjs module-selector
 
 # 运行 CLI
 node bin/cli.js list

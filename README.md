@@ -55,6 +55,8 @@ ln -s $(pwd)/skills/ai-thinker-c-coding-standard ~/.claude/skills/ai-thinker-c-c
 | [embedded-code-review](./skills/embedded-code-review) | Ai-Thinker embedded C deep code review |
 | [coder-ai-m62-m61](./skills/coder-ai-m62-m61) | BL616/BL618 development guide (Wi-Fi 6 + BLE 5.0) |
 | [coder-ai-wb2](./skills/coder-ai-wb2) | Ai-WB2/BL602 development guide (Wi-Fi 4 + BLE 5.0) |
+| [module-selector](./skills/module-selector) | Module selection assistant (WiFi/LoRa/Radar/UWB/NearLink) |
+| [scbb-module-finder](./skills/scbb-module-finder) | SCBB module finder from AiPi-SCBB repository |
 | [add-scbb-module](./skills/add-scbb-module) | Guide for adding new peripheral driver modules to AiPi-SCBB |
 | [add-skills](./skills/add-skills) | Guide for adding new skills to this repo |
 | [ota-generator](./skills/ota-generator) | Ai-Thinker embedded product OTA firmware generator |
@@ -96,6 +98,24 @@ Ai-Thinker Ai-WB2 series module development guide (BL602 chip) - Wi-Fi 4 + BLE 5
 - Developing with Ai-WB2 modules
 - Peripheral programming (GPIO, UART, PWM, ADC)
 - MQTT, HTTP network protocols
+
+### module-selector
+
+Ai-Thinker module selection assistant. Supports Wi-Fi, BLE, LoRa, Radar, UWB, NearLink, NB-IoT and other module recommendations with datasheet links.
+
+**Use cases:**
+- IoT module selection
+- Wireless communication module recommendation
+- Module specification comparison
+
+### scbb-module-finder
+
+SCBB module finder. Searches and retrieves peripheral driver modules from AiPi-SCBB repository, supporting I2C, UART, SPI, PWM+DMA protocols.
+
+**Use cases:**
+- Finding sensor drivers
+- Getting peripheral module code
+- SCBB framework integration
 
 ### add-scbb-module
 
@@ -141,6 +161,7 @@ skills/
 ├── scripts/                        # Build and release scripts
 │   ├── validate.mjs                # Validate SKILL.md files
 │   ├── build.mjs                   # Build skills to dist/
+│   ├── install.mjs                 # Install skills to user directories
 │   └── release.sh                  # Local release script
 ├── README.md                       # English documentation
 ├── README.zh.md                    # Chinese documentation
@@ -343,6 +364,12 @@ npm run validate
 
 # Build skills to dist/
 npm run build
+
+# Install skills to ~/.claude/skills and ~/.codex/skills
+npm run install:all
+
+# Install specific skill
+node scripts/install.mjs module-selector
 
 # Run CLI
 node bin/cli.js list
