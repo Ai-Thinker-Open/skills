@@ -113,10 +113,25 @@ description: 安信可模组选型助手。当用户需要选择物联网模组�
 - 工作温度
 - **规格书链接（必须提供）**
 
-### 步骤 4: 对比分析
+### 步骤 4: 提供开发评估
+
+根据 [dev-guide.md](references/dev-guide.md) 提供:
+- **开发难度评分**: ⭐~⭐⭐⭐⭐⭐
+- **文档完善度**: 规格书、教程、FAQ
+- **社区活跃度**: 问题响应速度
+- **供货稳定性**: 是否现货、长期供货
+
+### 步骤 5: 提供应用案例
+
+推荐典型应用场景:
+- 智能家居: 插座、开关、照明、门锁
+- 工业控制: 传感器、监控、远程控制
+- 消费电子: 穿戴设备、音频设备
+- 新能源: 充电桩、光伏监控
+
+### 步骤 6: 对比分析
 
 当多个型号可选时，提供对比表:
-- 价格区间
 - 性能差异
 - 开发难度
 - 供应链情况
@@ -129,3 +144,4 @@ description: 安信可模组选型助手。当用户需要选择物联网模组�
 | [lora-modules.md](references/lora-modules.md) | LoRa/LoRaWAN 模组 |
 | [radar-modules.md](references/radar-modules.md) | 雷达模组 |
 | [other-modules.md](references/other-modules.md) | UWB/NearLink/NB-IoT/蓝牙/GPS |
+| [dev-guide.md](references/dev-guide.md) | 开发评估、FAQ、应用案例 |
