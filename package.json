@@ -1,6 +1,6 @@
 {
   "name": "seahi-skills",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Cross-platform AI Agent Skills collection for MiMoCode, Claude Code, Codex, Cursor and 69+ platforms",
   "type": "module",
   "keywords": [
@@ -35,6 +35,8 @@
     "version:minor": "npm version minor --no-git-tag-version",
     "version:major": "npm version major --no-git-tag-version",
     "validate": "node scripts/validate.mjs",
-    "build": "node scripts/build.mjs"
+    "build": "node scripts/build.mjs",
+    "install:all": "node scripts/install.mjs",
+    "install": "node scripts/install.mjs"
   }
 }

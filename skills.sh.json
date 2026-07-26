@@ -16,6 +16,16 @@
       "name": "ota-generator",
       "path": "./skills/ota-generator",
       "description": "生成安信可嵌入式产品的 OTA 升级固件，支持模式A（添加MD5包头）和模式B（从源码编译）"
+    },
+    {
+      "name": "scbb-module-finder",
+      "path": "./skills/scbb-module-finder",
+      "description": "从 AiPi-SCBB 仓库查找并获取所需的外设驱动模块，优先从 GitHub 仓库检索"
+    },
+    {
+      "name": "module-selector",
+      "path": "./skills/module-selector",
+      "description": "安信可模组选型助手，支持 Wi-Fi、LoRa、雷达、UWB、星闪等全系列模组的选型推荐"
     }
   ]
 }

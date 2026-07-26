@@ -1,6 +1,6 @@
 ---
 name: add-scbb-module
-description: 向 AiPi-SCBB 库添加新的外设驱动模块。当用户需要添加新模块、创建新驱动、移植外设到 SCBB 框架时使用。遵循 `AXK_<模块名>_<协议通道>_ACLL` 宏模式和 Ai-Thinker C 编码规范。
+description: 向 AiPi-SCBB 库添加新的外设驱动模块。当用户需要添加新模块、创建新驱动、移植外设到 SCBB 框架时使用。遵循 AXK_模块名_协议通道_ACLL 宏模式和 Ai-Thinker C 编码规范。
 ---
 
 # 添加 SCBB 模块
