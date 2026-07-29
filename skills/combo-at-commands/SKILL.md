@@ -399,6 +399,41 @@ description: Ai-Thinker Combo模组AT指令开发助手。当用户需要使用A
 
 > 详见 [ble-commands.md](./references/ble-commands.md)
 
+## 编程开发速查
+
+### 串口发送规范
+
+| 规则 | 说明 |
+|------|------|
+| 结尾 | 每条指令必须以 `\r\n`（`0x0D 0x0A`）结尾 |
+| 编码 | 指令和参数使用ASCII，HEX数据用ASCII字符串表示 |
+| 长度 | 单条指令最大1023字节 |
+| 时序 | 必须等待上一条响应（OK/ERROR）后再发下一条 |
+| 转义 | 参数含逗号用双引号括起来，含双引号加`\`转义 |
+
+### 响应解析要点
+
+| 响应 | 类型 | 处理方式 |
+|------|------|----------|
+| `\r\nOK\r\n` | 成功 | 继续下一步 |
+| `\r\n+CMD:code\r\nERROR\r\n` | 失败 | 根据错误码处理 |
+| `\r\n+CMD:data\r\nOK\r\n` | 查询结果 | 解析data字段 |
+| `\r\n+EVENT:xxx\r\n` | URC事件 | 异步事件，随时可能出现 |
+| `>` | 数据提示 | 开始输入原始数据（不加`\r\n`） |
+
+### 异步指令清单
+
+以下指令返回OK后需等待URC确认实际结果：
+
+| 指令 | 等待的URC | 超时建议 |
+|------|-----------|----------|
+| `AT+WJAP` | `+EVENT:WIFI_GOT_IP` | 30秒 |
+| `AT+MQTT` | `+EVENT:MQTT_CONNECT` | 15秒 |
+| `AT+BLECONNECT` | `+EVENT:BLE_CONNECTED` | 10秒 |
+| `AT+BLEAUTOCON` | `+EVENT:BLE_CONNECTED` | 30秒 |
+
+> 详见 [serial-programming.md](./references/serial-programming.md)（含伪代码参考框架）
+
 ## 重要注意事项
 
 1. **瑞昱系列(BW16/BW20)多模开启顺序**：必须先开AP，再开STA和蓝牙
@@ -418,6 +453,7 @@ description: Ai-Thinker Combo模组AT指令开发助手。当用户需要使用A
 | 文档 | 内容 |
 |------|------|
 | [command-format.md](./references/command-format.md) | 指令格式、默认配置、启动信息、响应格式 |
+| [serial-programming.md](./references/serial-programming.md) | 串口编程指南（发送规则、时序要求、响应解析、参考代码框架） |
 | [urc-events.md](./references/urc-events.md) | URC主动上报事件完整列表及掩码设置 |
 | [basic-commands.md](./references/basic-commands.md) | 基础指令详细参数（AT/RST/RESTORE/SLEEP/UARTCFG/OTA等） |
 | [wifi-commands.md](./references/wifi-commands.md) | WiFi指令详细参数（WMODE/WJAP/WAP/WSCAN/DHCP等） |
