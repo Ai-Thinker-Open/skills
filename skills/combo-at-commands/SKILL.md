@@ -207,201 +207,122 @@ description: Ai-Thinker Combo模组AT指令开发助手。当用户需要使用A
 
 ## 常用功能开发流程
 
+> **格式说明**：每条指令给出「发送 → 预期响应」，`⚠` 标注关键检查点，`💡` 标注提示信息。
+
 ### 流程1：WiFi连接 + MQTT通信
 
-```
-步骤1: 测试AT是否正常
-  AT → OK
-
-步骤2: 设置WiFi为STA模式
-  AT+WMODE=1,1 → OK (1=STA, 1=保存flash)
-
-步骤3: 连接WiFi热点
-  AT+WJAP=SSID,密码 → OK
-  等待URC: +EVENT:WIFI_CONNECT
-  等待URC: +EVENT:WIFI_GOT_IP
-
-步骤4: 确认WiFi连接成功
-  AT+STAINFO? → 确认status=3
-
-步骤5: 设置MQTT参数
-  AT+MQTT=1,服务器IP/域名 → OK
-  AT+MQTT=2,端口号 → OK
-  AT+MQTT=3,1 → OK (1=TCP, 2=SSL)
-  AT+MQTT=4,client_id → OK
-  AT+MQTT=5,用户名 → OK
-  AT+MQTT=6,密码 → OK
-
-步骤6: 连接MQTT
-  AT+MQTT → OK (异步，仅表示任务启动)
-  等待URC: +EVENT:MQTT_CONNECT
-
-步骤7: 订阅主题
-  AT+MQTTSUB=topic,0 → OK
-
-步骤8: 发布消息
-  AT+MQTTPUB=topic,0,0,消息内容 → OK
-
-步骤9: 接收消息(URC自动推送)
-  +EVENT:MQTT_SUB,topic,长度,数据
-```
+| 步骤 | 指令 | 预期响应 | 说明 |
+|:----:|------|----------|------|
+| 1 | `AT` | `OK` | 测试AT框架是否正常 |
+| 2 | `AT+WMODE=1,1` | `OK` | 设置STA模式，参数`=模式,保存flash` |
+| 3 | `AT+WJAP=SSID,密码` | `OK` | 连接WiFi热点 |
+| ⚠ | *等待URC* | `+EVENT:WIFI_CONNECT` | WiFi物理连接成功 |
+| ⚠ | *等待URC* | `+EVENT:WIFI_GOT_IP` | 已获取IP地址 |
+| 4 | `AT+STAINFO?` | `+STAINFO:3` | 确认status=3（已连接+已获取IP） |
+| 5 | `AT+MQTT=1,服务器地址` | `OK` | 设置MQTT服务器IP或域名 |
+| | `AT+MQTT=2,端口号` | `OK` | 设置端口（如1883） |
+| | `AT+MQTT=3,1` | `OK` | 连接方式：1=TCP，2=SSL |
+| | `AT+MQTT=4,client_id` | `OK` | 设置客户端ID |
+| | `AT+MQTT=5,用户名` | `OK` | 设置用户名（最大63字节） |
+| | `AT+MQTT=6,密码` | `OK` | 设置密码（最大63字节） |
+| 6 | `AT+MQTT` | `OK` | 发起连接（异步，OK仅表示任务启动） |
+| ⚠ | *等待URC* | `+EVENT:MQTT_CONNECT` | MQTT连接成功 |
+| 7 | `AT+MQTTSUB=topic,0` | `OK` | 订阅主题，QOS=0 |
+| 8 | `AT+MQTTPUB=topic,0,0,data` | `OK` | 发布消息（topic,qos,retain,payload） |
+| 9 | *接收URC* | `+EVENT:MQTT_SUB,topic,len,data` | 消息自动推送到串口 |
 
 ### 流程2：WiFi连接 + TCP通信
 
-```
-步骤1: 连接WiFi (同上步骤1-4)
+> 前置：WiFi已连接（参考流程1步骤1-4）
 
-步骤2: 创建TCP Client连接
-  AT+SOCKET=4,服务器IP,端口 → connectsuccessConID=1
-  (返回的ConID=1用于后续收发数据)
-
-步骤3: 发送数据(长数据模式，适合大数据量)
-  AT+SOCKETSEND=1,5 → >  (1=ConID, 5=发送5字节)
-  hello → OK (输入5字节数据后自动发送)
-
-步骤3(替代): 发送数据(单行模式，适合小数据量)
-  AT+SOCKETSENDLINE=1,5,hello → OK
-  (单条指令最大1023字节)
-
-步骤4: 接收数据
-  主动模式: 自动打印 +EVENT:SocketDown,1,长度,数据
-  被动模式: AT+SOCKETREAD=1 → +SOCKETREAD:1,长度,数据
-
-步骤5: 进入透传模式(可选)
-  AT+SOCKETTT → > (进入透传)
-  +++ → OK (退出透传)
-```
+| 步骤 | 指令 | 预期响应 | 说明 |
+|:----:|------|----------|------|
+| 1 | `AT+SOCKET=4,服务器IP,端口` | `connectsuccessConID=1` | 创建TCP Client，返回ConID |
+| 2a | `AT+SOCKETSEND=1,5` | `>` | 长数据模式：ConID=1，发送5字节 |
+| | *输入数据* `hello` | `OK` | 收到`>`后输入数据，满5字节自动发送 |
+| 2b | `AT+SOCKETSENDLINE=1,5,hello` | `OK` | 单行模式（替代，适合小数据，最大1023字节） |
+| 3 | `AT+SOCKETRECVCFG=1` | `OK` | 切换到主动接收模式（收到数据直接打印） |
+| 4 | *接收URC* | `+EVENT:SocketDown,1,len,data` | 主动模式自动打印；被动模式用`AT+SOCKETREAD=1`读取 |
+| 5 | `AT+SOCKETTT` | `>` | 进入透传模式（仅限单连接） |
+| | `+++` | `OK` | 退出透传 |
 
 ### 流程3：BLE蓝牙透传
 
-```
-重要: 名称、UUID、广播数据、发射功率、连接间隔、配对码等参数
-      必须在蓝牙关闭状态下设置！先关闭蓝牙再配置参数。
+> ⚠ **关键前置条件**：名称、UUID、广播、功率、连接间隔、配对码等参数**必须在蓝牙关闭状态下设置**
 
-步骤1: 关闭蓝牙(确保配置参数前蓝牙已关闭)
-  AT+BLEMODE=9 → OK (9=关闭)
-  AT+BLESTATE? → 确认+BLESTATE:0 (未连接)
-
-步骤2: 设置蓝牙为从机模式
-  AT+BLEMODE=0 → OK (0=从机)
-
-步骤3: 设置蓝牙名称
-  AT+BLENAME=设备名 → OK
-
-步骤4: 设置透传UUID(如需自定义)
-  AT+BLESERUUID=UUID → OK (主服务UUID)
-  AT+BLETXUUID=UUID → OK (TX特征UUID，属性为NOTIFY)
-  AT+BLERXUUID=UUID → OK (RX特征UUID，属性为WRITE)
-
-步骤5: 开启广播
-  AT+BLEADVEN=1 → OK
-
-步骤6: 等待手机连接
-  URC: +EVENT:BLE_CONNECTED
-  确认: AT+BLESTATE? → +BLESTATE:1 (已连接)
-
-步骤7: 进入透传模式
-  AT+TRANSENTER → OK
-
-步骤8: 发送数据(长度必须与实际数据字节数一致)
-  AT+BLESEND=5,hello → OK
-
-步骤9: 接收数据(URC)
-  +DATA:长度,数据
-
-退出透传: +++
-```
+| 步骤 | 指令 | 预期响应 | 说明 |
+|:----:|------|----------|------|
+| 1 | `AT+BLEMODE=9` | `OK` | 先关闭蓝牙（9=关闭） |
+| | `AT+BLESTATE?` | `+BLESTATE:0` | 确认未连接状态 |
+| 2 | `AT+BLEMODE=0` | `OK` | 设置为从机模式（0=从机） |
+| 3 | `AT+BLENAME=设备名` | `OK` | 设置蓝牙名称（UTF-8，支持中文） |
+| 4 | `AT+BLESERUUID=UUID` | `OK` | 主服务UUID（可选，默认已有） |
+| | `AT+BLETXUUID=UUID` | `OK` | TX特征UUID（属性=NOTIFY） |
+| | `AT+BLERXUUID=UUID` | `OK` | RX特征UUID（属性=WRITE） |
+| 5 | `AT+BLEADVEN=1` | `OK` | 开启广播 |
+| ⚠ | *等待URC* | `+EVENT:BLE_CONNECTED` | 手机已连接 |
+| | `AT+BLESTATE?` | `+BLESTATE:1` | 确认已连接 |
+| 6 | `AT+TRANSENTER` | `OK` | 进入透传模式 |
+| 7 | `AT+BLESEND=5,hello` | `OK` | 发送数据（长度必须与实际字节数一致） |
+| 8 | *接收URC* | `+DATA:len,data` | 收到蓝牙透传数据 |
+| | `+++` | `OK` | 退出透传 |
 
 ### 流程4：GPIO控制
 
-```
-步骤1: 查询当前IO映射
-  AT+SYSIOMAP? → 查看当前映射
+| 步骤 | 指令 | 预期响应 | 说明 |
+|:----:|------|----------|------|
+| 1 | `AT+SYSIOMAP?` | `+SYSIOMAP:PinNumber:N,PinMap:...` | 查询当前IO映射表 |
+| 2 | `AT+SYSIOMAP=引脚数,pin1,pin2,...` | `OK` | 设置IO映射，NC=不可用引脚 |
+| 3 | `AT+SYSGPIOWRITE=引脚号,1` | `OK` | 输出高电平 |
+| 4 | `AT+SYSGPIOWRITE=引脚号,0` | `OK` | 输出低电平 |
+| 5 | `AT+SYSGPIOREAD=引脚号` | `+SYSGPIOREAD:引脚号,电平` | 读取电平（0=低/1=高） |
 
-步骤2: 设置IO映射(如需修改)
-  AT+SYSIOMAP=引脚数,pin1,pin2,... → OK
-  NC表示不可用引脚
-
-步骤3: 输出高电平
-  AT+SYSGPIOWRITE=引脚号,1 → OK
-
-步骤4: 输出低电平
-  AT+SYSGPIOWRITE=引脚号,0 → OK
-
-步骤5: 读取电平
-  AT+SYSGPIOREAD=引脚号 → +SYSGPIOREAD:引脚号,电平
-```
+> 💡 不同模组IO映射不同，使用前查阅 [io-map-table.md](./references/io-map-table.md)
 
 ### 流程5：PWM控制
 
-```
-步骤1: 配置PWM(推荐使用PWMCFGS，单位统一)
-  AT+PWMCFGS=引脚号,周期us,占空比百分比 → OK
-  例: AT+PWMCFGS=5,1000,50 → OK (1kHz, 50%占空比)
+| 步骤 | 指令 | 预期响应 | 说明 |
+|:----:|------|----------|------|
+| 1 | `AT+PWMCFGS=引脚号,周期us,占空比%` | `OK` | 配置PWM（推荐CFGS，单位统一） |
+| | *示例* `AT+PWMCFGS=5,1000,50` | `OK` | 1kHz，50%占空比 |
+| 2 | `AT+PWMDUTYSETS=引脚号,新占空比%` | `OK` | 动态更新占空比 |
+| 3 | `AT+PWMSTOP=引脚号` | `OK` | 关闭PWM输出 |
 
-步骤2: 更新占空比
-  AT+PWMDUTYSETS=引脚号,新占空比百分比 → OK
-
-步骤3: 关闭PWM
-  AT+PWMSTOP=引脚号 → OK
-```
+> 💡 Ai-WB2系列5路PWM的芯片引脚IO序号对5取余不能重复
 
 ### 流程6：低功耗模式
 
-```
-步骤1: 设置浅睡眠(定时唤醒)
-  AT+SLEEP=0,0,唤醒时间ms → OK
-
-步骤1(替代): 设置浅睡眠(GPIO唤醒)
-  AT+SLEEP=0,2,引脚号,电平 → OK
-  例: AT+SLEEP=0,2,7,0 → OK (IO7低电平唤醒)
-
-步骤2: 设置深度睡眠
-  AT+SLEEP=2,0,唤醒时间ms → OK
-```
+| 模式 | 指令 | 预期响应 | 说明 |
+|:----:|------|----------|------|
+| 浅睡眠+定时唤醒 | `AT+SLEEP=0,0,唤醒时间ms` | `OK` | 上电不自动进入浅睡眠 |
+| 浅睡眠+GPIO唤醒 | `AT+SLEEP=0,2,引脚号,电平` | `OK` | 电平：0=低/1=高/2=下降沿/3=上升沿/4=双边沿 |
+| | *示例* `AT+SLEEP=0,2,7,0` | `OK` | IO7低电平唤醒 |
+| 深度睡眠+定时唤醒 | `AT+SLEEP=2,0,唤醒时间ms` | `OK` | 唤醒后等同重启 |
+| 唤醒方式 | *串口发送任意数据* | — | 浅睡眠可通过串口数据唤醒 |
 
 ### 流程7：HTTP请求
 
-```
-前置条件: WiFi已连接并获取IP
+> 前置：WiFi已连接并获取IP
 
-步骤1: HTTP GET请求
-  AT+HTTPCLIENTLINE=1,2,,www.baidu.com,,
-  (1=HTTP, 2=GET, 服务器=www.baidu.com, 端口缺省80, 路径缺省/)
-  响应: Responselength:xxx / <响应内容> / OK
+| 步骤 | 指令 | 预期响应 | 说明 |
+|:----:|------|----------|------|
+| 1 | `AT+HTTPCLIENTLINE=1,2,,www.baidu.com,,` | `Responselength:xxx` + 响应体 + `OK` | HTTP GET（端口缺省80，路径缺省/） |
+| 2 | `AT+HTTPCLIENTLINE=2,2,,www.baidu.com,,` | 同上 | HTTPS GET（端口缺省443） |
+| 3 | `AT+HTTPCLIENTLINE=1,3,,192.168.1.100,8080,/api,"{\"k\":\"v\"}"` | 响应体 + `OK` | HTTP POST JSON |
+| 4 | `AT+HTTPRAW=1,3,application/json,IP,端口,/path,长度` | `>` | 长数据POST（超过单行限制时） |
+| | *输入数据* | 响应体 + `OK` | 收到`>`后输入指定长度数据 |
 
-步骤2: HTTPS GET请求
-  AT+HTTPCLIENTLINE=2,2,,www.baidu.com,,
-  (2=HTTPS, 2=GET, 端口缺省443)
+### 流程8：自动透传模式（上电即用）
 
-步骤3: HTTP POST请求(JSON)
-  AT+HTTPCLIENTLINE=1,3,application/json,192.168.1.100,8080,/api/test,"{\"key\":\"value\"}"
-  (1=HTTP, 3=POST, content-type=application/json)
+> 配置完成后，模组上电自动执行：连WiFi → 建Socket → 进透传
 
-步骤4: 长数据POST(超过单行限制时)
-  AT+HTTPRAW=1,3,application/json,192.168.1.100,8080,/api/test,100
-  → > (输入100字节数据)
-  → <响应内容> / OK
-```
-
-### 流程8：自动透传模式(上电即用)
-
-```
-步骤1: 连接WiFi并验证
-  AT+WJAP=SSID,密码 → OK
-  等待连接成功
-
-步骤2: 配置自动重连
-  AT+WAUTOCONN=1 → OK
-
-步骤3: 配置自动透传
-  AT+SOCKETAUTOTT=4,服务器IP,端口 → OK
-  (4=TCPClient自动透传)
-
-步骤4: 重启生效
-  AT+RST → OK
-  模组将自动: 连接WiFi → 创建Socket → 进入透传
-```
+| 步骤 | 指令 | 预期响应 | 说明 |
+|:----:|------|----------|------|
+| 1 | `AT+WJAP=SSID,密码` | `OK` | 连接WiFi |
+| ⚠ | *等待连接成功* | `+EVENT:WIFI_GOT_IP` | 确认WiFi连接 |
+| 2 | `AT+WAUTOCONN=1` | `OK` | 保存WiFi自动重连 |
+| 3 | `AT+SOCKETAUTOTT=4,服务器IP,端口` | `OK` | 4=TCPClient自动透传 |
+| 4 | `AT+RST` | `OK` | 重启后自动进入透传 |
 
 ## URC事件速查
 
