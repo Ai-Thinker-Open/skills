@@ -290,3 +290,491 @@ function setupBLETransparent(deviceName):
 | URC和响应混在一起解析 | 解析混乱 | 用前缀区分：`OK`/`ERROR`为响应，`+EVENT:`/`+DATA:`为URC |
 | 指令名大小写写死 | 无影响但不规范 | 指令名不区分大小写，但建议统一大写 |
 | 未处理超时 | 程序卡死 | 所有等待操作加超时机制 |
+
+## C语言参考实现
+
+### 串口发送基础
+
+```c
+#include <string.h>
+#include <stdio.h>
+
+// 串口发送AT指令（自动追加\r\n）
+void at_send(const char *cmd)
+{
+    char buf[512];
+    snprintf(buf, sizeof(buf), "%s\r\n", cmd);
+    uart_write(buf, strlen(buf));  // 平台相关：串口发送
+}
+
+// 串口发送原始数据（不追加\r\n，用于长数据模式）
+void at_send_raw(const uint8_t *data, uint16_t len)
+{
+    uart_write(data, len);
+}
+```
+
+### 响应读取与解析
+
+```c
+typedef enum {
+    AT_RESP_OK = 0,       // 收到OK
+    AT_RESP_ERROR,        // 收到ERROR
+    AT_RESP_TIMEOUT,      // 超时
+    AT_RESP_DATA,         // 收到查询数据
+} at_resp_t;
+
+// 读取一行响应（以\r\n为分隔），超时返回NULL
+// buf: 接收缓冲区  buf_size: 缓冲区大小  timeout_ms: 超时毫秒
+const char *at_readline(char *buf, uint16_t buf_size, uint32_t timeout_ms)
+{
+    uint16_t idx = 0;
+    uint32_t start = get_tick_ms();  // 平台相关：获取系统tick
+
+    while ((get_tick_ms() - start) < timeout_ms) {
+        uint8_t ch;
+        if (uart_read(&ch, 1, 10) == 1) {  // 平台相关：串口接收，10ms超时
+            if (ch == '\n' && idx > 0 && buf[idx - 1] == '\r') {
+                buf[idx - 1] = '\0';  // 去掉\r\n
+                return buf;
+            }
+            if (idx < buf_size - 1) {
+                buf[idx++] = ch;
+            }
+        }
+    }
+    return NULL;  // 超时
+}
+
+// 解析响应类型
+at_resp_t at_parse_response(const char *line)
+{
+    if (line == NULL)               return AT_RESP_TIMEOUT;
+    if (strstr(line, "OK"))         return AT_RESP_OK;
+    if (strstr(line, "ERROR"))      return AT_RESP_ERROR;
+    if (line[0] == '+')             return AT_RESP_DATA;
+    return AT_RESP_DATA;
+}
+```
+
+### 发送指令并等待OK
+
+```c
+// 发送AT指令并等待OK/ERROR响应
+// 返回: AT_RESP_OK / AT_RESP_ERROR / AT_RESP_TIMEOUT
+at_resp_t at_cmd(const char *cmd, uint32_t timeout_ms)
+{
+    char buf[512];
+    at_send(cmd);
+
+    while (1) {
+        if (at_readline(buf, sizeof(buf), timeout_ms) == NULL) {
+            return AT_RESP_TIMEOUT;
+        }
+
+        // 跳过URC事件（+EVENT: / +DATA:）
+        if (strncmp(buf, "+EVENT:", 7) == 0 || strncmp(buf, "+DATA:", 6) == 0) {
+            urc_handler(buf);  // 处理URC（见下方）
+            continue;
+        }
+
+        return at_parse_response(buf);
+    }
+}
+```
+
+### 查询指令（提取响应数据）
+
+```c
+// 发送查询指令，提取OK之前的响应行
+// 返回: AT_RESP_OK 并将响应内容存入 resp_buf
+at_resp_t at_query(const char *cmd, char *resp_buf, uint16_t resp_size, uint32_t timeout_ms)
+{
+    char buf[512];
+    resp_buf[0] = '\0';
+    at_send(cmd);
+
+    while (1) {
+        if (at_readline(buf, sizeof(buf), timeout_ms) == NULL) {
+            return AT_RESP_TIMEOUT;
+        }
+
+        if (strncmp(buf, "+EVENT:", 7) == 0 || strncmp(buf, "+DATA:", 6) == 0) {
+            urc_handler(buf);
+            continue;
+        }
+
+        if (strstr(buf, "OK")) {
+            return AT_RESP_OK;
+        }
+        if (strstr(buf, "ERROR")) {
+            return AT_RESP_ERROR;
+        }
+
+        // 保存响应数据（去掉前导\r\n）
+        const char *data = buf;
+        while (*data == '\r' || *data == '\n') data++;
+        snprintf(resp_buf, resp_size, "%s", data);
+    }
+}
+```
+
+### URC事件处理
+
+```c
+// URC事件回调注册
+typedef void (*urc_callback_t)(const char *urc_line);
+
+static urc_callback_t g_urc_cb = NULL;
+
+void at_set_urc_callback(urc_callback_t cb)
+{
+    g_urc_cb = cb;
+}
+
+// URC处理（在指令等待循环中调用）
+static void urc_handler(const char *urc_line)
+{
+    if (g_urc_cb) {
+        g_urc_cb(urc_line);
+    }
+
+    // 也可以在这里直接处理关键URC
+    if (strstr(urc_line, "+EVENT:WIFI_GOT_IP")) {
+        // WiFi已获取IP
+        wifi_connected = 1;
+    } else if (strstr(urc_line, "+EVENT:MQTT_CONNECT")) {
+        // MQTT连接成功
+        mqtt_connected = 1;
+    } else if (strstr(urc_line, "+EVENT:BLE_CONNECTED")) {
+        // 蓝牙已连接
+        ble_connected = 1;
+    }
+}
+```
+
+### 等待指定URC事件
+
+```c
+// 等待包含指定前缀的URC事件
+// 返回: 0=成功  -1=超时
+int at_wait_urc(const char *urc_prefix, uint32_t timeout_ms)
+{
+    char buf[512];
+    uint32_t start = get_tick_ms();
+
+    while ((get_tick_ms() - start) < timeout_ms) {
+        if (at_readline(buf, sizeof(buf), 500) == NULL) {
+            continue;  // 单次读取超时，继续等
+        }
+
+        // 处理所有URC
+        if (strncmp(buf, "+EVENT:", 7) == 0 || strncmp(buf, "+DATA:", 6) == 0) {
+            urc_handler(buf);
+            if (strstr(buf, urc_prefix)) {
+                return 0;  // 找到目标URC
+            }
+        }
+    }
+    return -1;  // 超时
+}
+```
+
+### 长数据发送（等待`>`提示符）
+
+```c
+// 发送需要>提示符的长数据指令
+// 例: at_send_with_data("AT+SOCKETSEND=1,5", (uint8_t*)"hello", 5, 5000)
+int at_send_with_data(const char *cmd, const uint8_t *data, uint16_t len, uint32_t timeout_ms)
+{
+    char buf[16];
+    at_send(cmd);
+
+    // 等待 '>' 提示符
+    uint32_t start = get_tick_ms();
+    int got_prompt = 0;
+    while ((get_tick_ms() - start) < timeout_ms) {
+        uint8_t ch;
+        if (uart_read(&ch, 1, 10) == 1) {
+            if (ch == '>') {
+                got_prompt = 1;
+                break;
+            }
+        }
+    }
+    if (!got_prompt) return -1;
+
+    // 发送原始数据（不加\r\n）
+    at_send_raw(data, len);
+
+    // 等待 OK
+    return (at_cmd("", timeout_ms) == AT_RESP_OK) ? 0 : -1;
+}
+```
+
+### 完整示例：WiFi连接
+
+```c
+// 返回: 0=成功  负值=失败
+int wifi_connect(const char *ssid, const char *password)
+{
+    char cmd[128];
+    char resp[256];
+
+    // 1. 测试AT
+    if (at_cmd("AT", 1000) != AT_RESP_OK) {
+        printf("AT测试失败\n");
+        return -1;
+    }
+
+    // 2. 设置STA模式
+    if (at_cmd("AT+WMODE=1,1", 2000) != AT_RESP_OK) {
+        printf("设置WiFi模式失败\n");
+        return -2;
+    }
+
+    // 3. 连接WiFi
+    snprintf(cmd, sizeof(cmd), "AT+WJAP=%s,%s", ssid, password);
+    if (at_cmd(cmd, 5000) != AT_RESP_OK) {
+        printf("WiFi连接指令失败\n");
+        return -3;
+    }
+
+    // 4. 等待获取IP（异步，超时30秒）
+    if (at_wait_urc("+EVENT:WIFI_GOT_IP", 30000) != 0) {
+        printf("WiFi连接超时\n");
+        return -4;
+    }
+
+    // 5. 确认连接状态
+    at_query("AT+STAINFO?", resp, sizeof(resp), 2000);
+    if (strstr(resp, "+STAINFO:3") == NULL) {
+        printf("WiFi状态异常: %s\n", resp);
+        return -5;
+    }
+
+    printf("WiFi连接成功\n");
+    return 0;
+}
+```
+
+### 完整示例：MQTT连接
+
+```c
+// 前置：WiFi已连接
+// 返回: 0=成功  负值=失败
+int mqtt_connect(const char *host, int port, const char *client_id,
+                 const char *username, const char *password)
+{
+    char cmd[256];
+
+    // 1. 设置MQTT参数
+    snprintf(cmd, sizeof(cmd), "AT+MQTT=1,%s", host);
+    at_cmd(cmd, 2000);
+
+    snprintf(cmd, sizeof(cmd), "AT+MQTT=2,%d", port);
+    at_cmd(cmd, 2000);
+
+    at_cmd("AT+MQTT=3,1", 2000);  // TCP连接
+
+    snprintf(cmd, sizeof(cmd), "AT+MQTT=4,%s", client_id);
+    at_cmd(cmd, 2000);
+
+    snprintf(cmd, sizeof(cmd), "AT+MQTT=5,%s", username);
+    at_cmd(cmd, 2000);
+
+    snprintf(cmd, sizeof(cmd), "AT+MQTT=6,%s", password);
+    at_cmd(cmd, 2000);
+
+    // 2. 发起连接
+    if (at_cmd("AT+MQTT", 2000) != AT_RESP_OK) {
+        printf("MQTT连接指令失败\n");
+        return -1;
+    }
+
+    // 3. 等待连接成功URC
+    if (at_wait_urc("+EVENT:MQTT_CONNECT", 15000) != 0) {
+        printf("MQTT连接超时\n");
+        return -2;
+    }
+
+    printf("MQTT连接成功\n");
+    return 0;
+}
+
+// MQTT订阅主题
+int mqtt_subscribe(const char *topic, int qos)
+{
+    char cmd[256];
+    snprintf(cmd, sizeof(cmd), "AT+MQTTSUB=%s,%d", topic, qos);
+    return (at_cmd(cmd, 3000) == AT_RESP_OK) ? 0 : -1;
+}
+
+// MQTT发布消息
+int mqtt_publish(const char *topic, int qos, int retain, const char *payload)
+{
+    char cmd[512];
+    snprintf(cmd, sizeof(cmd), "AT+MQTTPUB=%s,%d,%d,%s", topic, qos, retain, payload);
+    return (at_cmd(cmd, 3000) == AT_RESP_OK) ? 0 : -1;
+}
+```
+
+### 完整示例：BLE透传
+
+```c
+// 返回: 0=成功  负值=失败
+int ble_transparent_setup(const char *device_name)
+{
+    char cmd[128];
+
+    // 1. 关闭蓝牙
+    at_cmd("AT+BLEMODE=9", 2000);
+
+    // 2. 确认关闭
+    char resp[64];
+    at_query("AT+BLESTATE?", resp, sizeof(resp), 2000);
+    if (strstr(resp, "+BLESTATE:0") == NULL) {
+        printf("蓝牙未关闭\n");
+        return -1;
+    }
+
+    // 3. 设置从机模式
+    at_cmd("AT+BLEMODE=0", 2000);
+
+    // 4. 设置名称
+    snprintf(cmd, sizeof(cmd), "AT+BLENAME=%s", device_name);
+    at_cmd(cmd, 2000);
+
+    // 5. 开启广播
+    at_cmd("AT+BLEADVEN=1", 2000);
+
+    // 6. 等待手机连接（超时60秒）
+    if (at_wait_urc("+EVENT:BLE_CONNECTED", 60000) != 0) {
+        printf("等待蓝牙连接超时\n");
+        return -2;
+    }
+
+    // 7. 进入透传模式
+    at_cmd("AT+TRANSENTER", 2000);
+
+    printf("蓝牙透传已建立\n");
+    return 0;
+}
+```
+
+### 完整示例：Socket TCP通信
+
+```c
+static int g_con_id = -1;  // Socket连接ID
+
+// 创建TCP Client
+int tcp_connect(const char *host, int port)
+{
+    char cmd[256];
+    char resp[128];
+
+    snprintf(cmd, sizeof(cmd), "AT+SOCKET=4,%s,%d", host, port);
+    at_send(cmd);
+
+    // 等待 connectsuccessConID=x
+    uint32_t start = get_tick_ms();
+    while ((get_tick_ms() - start) < 10000) {
+        if (at_readline(resp, sizeof(resp), 1000) == NULL) continue;
+
+        if (strstr(resp, "connectsuccessConID=")) {
+            g_con_id = atoi(strstr(resp, "=") + 1);
+            printf("TCP连接成功, ConID=%d\n", g_con_id);
+            return 0;
+        }
+        if (strstr(resp, "ERROR")) {
+            printf("TCP连接失败\n");
+            return -1;
+        }
+    }
+    return -2;  // 超时
+}
+
+// 发送数据
+int tcp_send(const uint8_t *data, uint16_t len)
+{
+    char cmd[64];
+    snprintf(cmd, sizeof(cmd), "AT+SOCKETSEND=%d,%d", g_con_id, len);
+    return at_send_with_data(cmd, data, len, 5000);
+}
+
+// 读取数据（被动模式）
+int tcp_recv(char *buf, uint16_t buf_size, uint32_t timeout_ms)
+{
+    char cmd[32];
+    char resp[1500];
+
+    snprintf(cmd, sizeof(cmd), "AT+SOCKETREAD=%d", g_con_id);
+    at_send(cmd);
+
+    // 等待 +SOCKETREAD:ConID,len,data
+    uint32_t start = get_tick_ms();
+    while ((get_tick_ms() - start) < timeout_ms) {
+        if (at_readline(resp, sizeof(resp), 1000) == NULL) continue;
+
+        if (strncmp(resp, "+SOCKETREAD:", 12) == 0) {
+            // 解析: +SOCKETREAD:1,5,hello
+            char *p = strchr(resp, ',');  // 跳过ConID
+            if (p) {
+                p++;  // 跳过逗号
+                // p 指向 "len,data"
+                char *comma = strchr(p, ',');
+                if (comma) {
+                    uint16_t data_len = atoi(p);
+                    snprintf(buf, buf_size, "%s", comma + 1);
+                    return data_len;
+                }
+            }
+        }
+    }
+    return -1;  // 超时无数据
+}
+```
+
+### 主循环示例
+
+```c
+int main(void)
+{
+    uart_init(115200);  // 初始化串口
+
+    // 等待模组启动（检测ready）
+    char buf[256];
+    while (1) {
+        if (at_readline(buf, sizeof(buf), 10000)) {
+            if (strstr(buf, "ready")) break;
+        }
+    }
+    printf("模组已启动\n");
+
+    // 连接WiFi
+    if (wifi_connect("MySSID", "MyPassword") != 0) {
+        printf("WiFi连接失败\n");
+        return -1;
+    }
+
+    // 连接MQTT
+    if (mqtt_connect("192.168.1.100", 1883, "device001", "user", "pass") != 0) {
+        printf("MQTT连接失败\n");
+        return -2;
+    }
+
+    // 订阅主题
+    mqtt_subscribe("device/cmd", 0);
+
+    // 主循环：上报数据 + 处理下发
+    while (1) {
+        // 上报属性
+        mqtt_publish("device/property", 0, 0, "{\"temp\":25.6}");
+
+        // 检查是否有下发数据（URC已在at_cmd内部处理）
+        delay_ms(5000);
+    }
+}
+```
+
+> 💡 以上代码基于Combo模组AT指令协议实现，可直接移植到STM32/ESP32/BL602等嵌入式平台。需根据实际平台替换 `uart_write()`、`uart_read()`、`get_tick_ms()` 等硬件相关函数。
