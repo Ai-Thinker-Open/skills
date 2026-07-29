@@ -8,20 +8,20 @@
 |------|------|
 | 描述 | 查询SNTP时间 |
 | 响应 | `+SNTPTIME:<week><month><day><HH>:<mm>:<ss><yyyy>` → OK |
-| 注意 | SNTP默认没有开启，需联网后使用AT+SNTPTIMECFG启动。未启用时查询的是本地RTC时间。 |
+| 注意 | SNTP默认没有开启，需要联网后使用AT+SNTPTIMECFG启动，没有启用的时候查询的是本地RTC时间 |
 
 **响应字段说明：**
-- week: 星期 [Mon,Tue,Wed,Thu,Fri,Sat,Sun]
-- month: 月份 [Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec]
-- day: 日
-- HH: 小时
-- mm: 分钟
-- ss: 秒
-- yyyy: 年
+- week：星期 [Mon,Tue,Wed,Thu,Fri,Sat,Sun]
+- month：月份 [Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec]
+- day：日
+- HH：小时
+- mm：分钟
+- ss：秒
+- yyyy：年
 
 **示例：**
 ```
-AT+SNTPTIMECFG=1,8    // 开启SNTP，时区+8
+AT+SNTPTIMECFG=1,8    // 开启SNTP
 OK
 AT+SNTPTIME?           // 同步成功后查询时间
 +SNTPTIME:WedMay0310:49:412023
@@ -29,6 +29,8 @@ OK
 ```
 
 | 支持型号 | Ai-WB2系列 |
+
+---
 
 ## 4.5.2 AT+SNTPTIMECFG — SNTP时区和服务器配置
 
@@ -40,9 +42,9 @@ OK
 | 响应 | `+SNTPTIMECFG:<enable>,<timezone>[,<SNTPserver1>,<SNTPserver2>,<SNTPserver3>]` → OK |
 
 **响应字段说明：**
-- enable: SNTP刷新服务是否启动（0=未运行，1=运行中）
-- timezone: 时区（-12~+14）
-- SNTPserver1/2/3: SNTP服务器域名
+- enable：SNTP刷新服务是否启动；0未运行；1运行中
+- timezone：时区，取值-12~+14
+- SNTPserver1/2/3：SNTP服务器域名
 
 **示例：**
 ```
@@ -53,15 +55,25 @@ OK
 
 ### 设置: AT+SNTPTIMECFG=<enable>,<timezone>[,<SNTPserver1>,<SNTPserver2>,<SNTPserver3>]
 
-| 参数 | 说明 |
-|------|------|
-| enable | 0=关闭，1=启动 |
-| timezone | 时区（-12~+14） |
-| SNTPserver1/2/3 | SNTP服务器域名（缺省默认"cn.ntp.org.cn"、"ntp.sjtu.edu.cn"、"us.pool.ntp.org"） |
+| 参数 | 类型 | 必选 | 取值范围 | 说明 |
+|------|------|:---:|----------|------|
+| enable | 整数 | 是 | 0：关闭，1：启动 | SNTP刷新服务状态设置 |
+| timezone | 整数 | 是 | -12~+14 | 时区 |
+| SNTPserver1 | 字符串 | 否 | — | SNTP服务器域名，缺省默认"cn.ntp.org.cn" |
+| SNTPserver2 | 字符串 | 否 | — | SNTP服务器域名，缺省默认"ntp.sjtu.edu.cn" |
+| SNTPserver3 | 字符串 | 否 | — | SNTP服务器域名，缺省默认"us.pool.ntp.org" |
 
-| 响应 | OK |
-| 示例 | `AT+SNTPTIMECFG=1,8,cn.ntp.org.cn` → OK |
+**响应：** OK
+
+**示例：**
+```
+AT+SNTPTIMECFG=1,8,cn.ntp.org.cn
+OK
+```
+
 | 支持型号 | Ai-WB2系列 |
+
+---
 
 ## 4.5.3 AT+SNTPINTV — SNTP刷新时间间隔
 
@@ -71,13 +83,27 @@ OK
 |------|------|
 | 描述 | 查询SNTP服务刷新间隔 |
 | 响应 | `+SNTPINTV:<intervalsecond>` → OK |
-| 示例 | `AT+SNTPINTV?` → `+SNTPINTV:3600` → OK |
+
+**响应字段说明：**
+- intervalsecond：刷新间隔，单位S
+
+**示例：**
+```
+AT+SNTPINTV?
++SNTPINTV:3600
+OK
+```
 
 ### 设置: AT+SNTPINTV=<intervalsecond>
 
-| 参数 | 说明 |
-|------|------|
-| intervalsecond | 刷新间隔，单位秒，取值15~4294967 |
+| 参数 | 类型 | 必选 | 取值范围 | 说明 |
+|------|------|:---:|----------|------|
+| intervalsecond | 整数 | 是 | 15~4294967 | 刷新间隔，单位S |
 
-| 响应 | OK |
-| 示例 | `AT+SNTPINTV=15` → OK |
+**响应：** OK
+
+**示例：**
+```
+AT+SNTPINTV=15
+OK
+```
