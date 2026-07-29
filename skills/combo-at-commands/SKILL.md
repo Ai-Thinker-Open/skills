@@ -324,6 +324,34 @@ description: Ai-Thinker Combo模组AT指令开发助手。当用户需要使用A
 | 3 | `AT+SOCKETAUTOTT=4,服务器IP,端口` | `OK` | 4=TCPClient自动透传 |
 | 4 | `AT+RST` | `OK` | 重启后自动进入透传 |
 
+### 流程9：连接腾讯云物联网平台
+
+> 前置：在腾讯云IoT控制台创建设备，获取 product_id、device_name、device_secret（Base64）。认证算法见 [tencent-iot.md](./references/tencent-iot.md)。
+
+| 步骤 | 指令 | 预期响应 | 说明 |
+|:----:|------|----------|------|
+| 1 | `AT` | `OK` | 测试AT，连接WiFi（参考流程1步骤1-4） |
+| 2 | *在PC端计算* | — | username=`{pid}{dname};12010126;{random};{utc_expiry}` / password=`base64(hmac_sha1(secret, plaintext));hmacsha1` |
+| 3 | `AT+MQTT=1,{pid}.iotcloud.tencentdevices.com` | `OK` | 设置MQTT服务器（广州region） |
+| | `AT+MQTT=2,1883` | `OK` | 端口1883=TCP，8883=SSL |
+| | `AT+MQTT=3,1` | `OK` | 连接方式1=TCP |
+| | `AT+MQTT=4,{pid}{dname}` | `OK` | client_id |
+| | `AT+MQTT=5,{username}` | `OK` | username（最大63字节） |
+| | `AT+MQTT=6,{password}` | `OK` | password（含;hmacsha1后缀） |
+| 4 | `AT+MQTTKEEPALIVE=120,5` | `OK` | 心跳120s，TCP保活5s |
+| | `AT+MQTT?` | `+MQTT:0,...` | 确认所有参数 |
+| 5 | `AT+MQTT` | `OK` | 发起连接（异步） |
+| ⚠ | *等待URC* | `+EVENT:MQTT_CONNECT` | MQTT连接成功 |
+| 6 | `AT+MQTTSUB=$thing/down/property/{pid}/{dname},1` | `OK` | 订阅属性下发 |
+| | `AT+MQTTSUB=$thing/down/action/{pid}/{dname},1` | `OK` | 订阅行为调用 |
+| 7 | `AT+MQTTPUB=$thing/up/property/{pid}/{dname},1,0,{"method":"report","clientToken":"t001","params":{"温度":25.6}}` | `OK` | 属性上报（JSON，method=report） |
+| 8 | `AT+MQTTPUB=$thing/up/event/{pid}/{dname},1,0,{"method":"event_post","clientToken":"e001","eventId":"power_on","params":{"voltage":3300},"type":"info"}` | `OK` | 事件上报 |
+| 9 | *接收URC* | `+EVENT:MQTT_SUB,$thing/down/property/...,len,data` | 云端属性设置下发，收到后回复 `report_reply` |
+| 10 | `AT+MQTTDISCONN` | `OK` | 断开MQTT |
+
+> 💡 密码内嵌UTC时间戳，过期后需重新计算 username/password，再次执行 key5/key6 设置并 AT+MQTT 重连。SSL 加密需额外配置 `AT+MQTT=3,2` + `AT+MQTTCRET` 加载 CA 证书。
+
+
 ## URC事件速查
 
 | 类别 | URC | 说明 |
@@ -342,6 +370,34 @@ description: Ai-Thinker Combo模组AT指令开发助手。当用户需要使用A
 | BLE | `+DATA:<len>,<data>` | 蓝牙透传数据 |
 
 > 详见 [urc-events.md](./references/urc-events.md)
+
+## BLE 通信配置速查
+
+### 透传数据量与MTU
+
+| 目标 | 建议配置 | 指令 |
+|------|----------|------|
+| 兼容性优先 | MTU=23（BLE 4.0默认） | `AT+BLEMTU=23` |
+| 速度优先 | MTU=247（TB默认） | `AT+BLEMTU=247` |
+| 最大吞吐 | MTU=250 | `AT+BLEMTU=250` |
+
+### 连接参数场景化配置
+
+| 场景 | 指令 | 特点 |
+|------|------|------|
+| 低功耗传感器 | `AT+BLECONINTV=800,1600,4,600` | 长间隔+跳过连接，最省电 |
+| 实时控制 | `AT+BLECONINTV=6,12,0,200` | 最短间隔，响应最快（PB默认） |
+| 均衡模式 | `AT+BLECONINTV=100,200,2,300` | 功耗和响应兼顾 |
+| 大数据传输 | `AT+BLECONINTV=6,6,0,200` | 最短间隔+无跳过，吞吐最大 |
+
+### 安全配对
+
+| 模式 | 指令 | 安全性 |
+|------|------|:---:|
+| 无配对 | 不设置 | 低（默认） |
+| 配对码 | `AT+BLEAUTH=123456` | 中（6位数字） |
+
+> 详见 [ble-commands.md](./references/ble-commands.md)
 
 ## 重要注意事项
 
@@ -369,8 +425,10 @@ description: Ai-Thinker Combo模组AT指令开发助手。当用户需要使用A
 | [mqtt-commands.md](./references/mqtt-commands.md) | MQTT指令详细参数（MQTT/PUB/SUB/VER/BUF/CERT等） |
 | [http-commands.md](./references/http-commands.md) | HTTP指令详细参数（HTTPCLIENTLINE/HTTPRAW） |
 | [sntp-commands.md](./references/sntp-commands.md) | SNTP指令详细参数（SNTPTIMECFG/SNTPTIME/SNTPINTV） |
-| [ble-commands.md](./references/ble-commands.md) | BLE蓝牙指令详细参数（BLEMODE/NAME/SCAN/CONNECT/MESH等） |
+| [ble-commands.md](./references/ble-commands.md) | BLE蓝牙指令详细参数 + 通信实用指南（透传/MTU分包/连接参数优化/安全配对/广播调优/主机模式） |
 | [gpio-pwm-commands.md](./references/gpio-pwm-commands.md) | GPIO/PWM指令详细参数（SYSIOMAP/GPIOWRITE/PWMCFG等） |
 | [test-commands.md](./references/test-commands.md) | 产测指令详细参数（NodeMCUTEST/LEDTEST） |
 | [error-codes.md](./references/error-codes.md) | 完整错误码列表及排查方法 |
 | [io-map-table.md](./references/io-map-table.md) | 各型号模组IO映射配置表 |
+
+| [tencent-iot.md](./references/tencent-iot.md) | 腾讯云IoT连接完整流程、认证算法、主题体系、JSON格式 |
