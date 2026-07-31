@@ -10,6 +10,15 @@ AI agent skills for Ai-Thinker embedded product development — coding standards
 
 > **Note:** This repository is mirrored to GitHub for easy installation. The `npx skills add` command works with the GitHub repository.
 
+## Introduction
+
+This repository is a curated collection of AI agent skills built for
+Ai-Thinker embedded product development. It covers coding standards, deep
+code review, chip/module development guides (BL602/BL616/BL618), peripheral
+driver templates, and module selection, and follows the open
+[Agent Skills](https://agentskills.io) specification so the same skills work
+across MiMoCode, Claude Code, Codex, Cursor and 70+ other platforms.
+
 ## Quick Start
 
 ### Method 0: Using npx (Recommended)
@@ -476,6 +485,28 @@ Project uses `.coding-ci.yml` to configure Coding platform CI/CD pipeline.
 |-------|---------|-------------|
 | validate | All pushes | Validate SKILL.md format |
 | build | All pushes | Build dist/ directory |
+
+## FAQ / Troubleshooting
+
+**`npm run check:updates` exits with code 2.**
+The remote is unreachable, or the checked branch has no
+`skills-manifest.json`. Push the manifest to both remotes first, then retry.
+
+**`npm run validate` reports `skills-manifest.json is out of date`.**
+Run `npm run manifest` to regenerate the manifest, then commit it together
+with your skill changes.
+
+**How do I install just one skill?**
+Use `node scripts/install.mjs <skill-name>` from the repo root, or
+`npx skills add Ai-Thinker-Open/skills --skill <skill-name>`.
+
+## Contributing
+
+Contributions are welcome. To add a new skill, follow the steps in
+[Creating a New Skill](#creating-a-new-skill) above, or read the
+[add-skills](./skills/add-skills) guide. After changing any skill, run
+`npm run manifest` and `npm run validate`, then commit and push to both the
+GitHub (`github`) and Coding (`origin`) remotes so the mirrors stay in sync.
 
 ## License
 

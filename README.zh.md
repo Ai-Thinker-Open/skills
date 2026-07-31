@@ -10,6 +10,14 @@
 
 > **注意：** 本仓库已同步到 GitHub 以便安装。`npx skills add` 命令可直接使用 GitHub 仓库。
 
+## 项目介绍
+
+本仓库是面向安信可（Ai-Thinker）嵌入式产品开发整理的 AI Agent Skills
+集合，覆盖编码规范、深度代码审查、BL602/BL616/BL618 等芯片与模组开发指南、
+外设驱动模板和模组选型。所有 skill 遵循开放的
+[Agent Skills](https://agentskills.io) 规范，可在 MiMoCode、Claude Code、
+Codex、Cursor 等 69+ 平台通用。
+
 ## 快速开始
 
 ### 方法 0：使用 npx（推荐）
@@ -480,6 +488,26 @@ git push origin main --tags
 |------|----------|------|
 | validate | 所有推送 | 验证 SKILL.md 格式 |
 | build | 所有推送 | 构建 dist/ 目录 |
+
+## FAQ / 常见问题
+
+**`npm run check:updates` 退出码为 2。**
+远端不可达，或所检查的分支上没有 `skills-manifest.json`。先把清单推送到
+两个远端，再重试。
+
+**`npm run validate` 提示 `skills-manifest.json is out of date`。**
+运行 `npm run manifest` 重新生成清单，并与 skill 改动一起提交。
+
+**只想安装某一个 skill 怎么办？**
+在仓库根目录执行 `node scripts/install.mjs <skill-name>`，或使用
+`npx skills add Ai-Thinker-Open/skills --skill <skill-name>`。
+
+## 贡献指南
+
+欢迎贡献。新增 skill 请参照上文[创建新 Skill](#创建新-skill)的步骤，或阅读
+[add-skills](./skills/add-skills) 指南。修改任何 skill 后，请运行
+`npm run manifest` 和 `npm run validate`，然后提交并同时推送到 GitHub
+（`github`）与 Coding（`origin`）两个远端，保持镜像同步。
 
 ## 许可证
 
