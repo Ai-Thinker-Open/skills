@@ -63,6 +63,7 @@ ln -s $(pwd)/skills/ai-thinker-c-coding-standard ~/.claude/skills/ai-thinker-c-c
 | [embedded-code-review](./skills/embedded-code-review) | 安信可嵌入式 C 代码深度审查 |
 | [coder-ai-m62-m61](./skills/coder-ai-m62-m61) | BL616/BL618 开发指南 (Wi-Fi 6 + BLE 5.0) |
 | [coder-ai-wb2](./skills/coder-ai-wb2) | Ai-WB2/BL602 开发指南 (Wi-Fi 4 + BLE 5.0) |
+| [combo-at-commands](./skills/combo-at-commands) | Combo 模组 AT 指令开发助手（WiFi/MQTT/Socket/BLE/HTTP/SNTP/GPIO/PWM） |
 | [module-selector](./skills/module-selector) | 安信可模组选型助手（WiFi/LoRa/雷达/UWB/星闪） |
 | [scbb-module-finder](./skills/scbb-module-finder) | SCBB 模块查找器 |
 | [ota-generator](./skills/ota-generator) | OTA 固件生成器 |
@@ -106,6 +107,18 @@ ln -s $(pwd)/skills/ai-thinker-c-coding-standard ~/.claude/skills/ai-thinker-c-c
 - Ai-WB2 模组开发
 - 外设编程 (GPIO、UART、PWM、ADC)
 - MQTT、HTTP 网络协议
+
+### combo-at-commands
+
+安信可 Combo 模组 AT 指令开发助手。覆盖 Combo 框架 AT 指令集
+（V4.18P_3.8.0），适用于 Ai-WB2 (BL602)、Ai-M61/M62 (BL616/BL618) 模组，
+支持 WiFi、MQTT、Socket、BLE、HTTP、SNTP、GPIO、PWM 等全功能 AT 指令。
+
+**使用场景：**
+- 使用 AT 指令开发 IoT 功能
+- 查询 AT 指令用法与参数
+- 排查 AT 指令 / URC 事件问题
+- 规划 AT 指令执行流程
 
 ### module-selector
 

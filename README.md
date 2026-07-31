@@ -64,6 +64,7 @@ ln -s $(pwd)/skills/ai-thinker-c-coding-standard ~/.claude/skills/ai-thinker-c-c
 | [embedded-code-review](./skills/embedded-code-review) | Ai-Thinker embedded C deep code review |
 | [coder-ai-m62-m61](./skills/coder-ai-m62-m61) | BL616/BL618 development guide (Wi-Fi 6 + BLE 5.0) |
 | [coder-ai-wb2](./skills/coder-ai-wb2) | Ai-WB2/BL602 development guide (Wi-Fi 4 + BLE 5.0) |
+| [combo-at-commands](./skills/combo-at-commands) | Ai-Thinker Combo AT command development assistant (WiFi/MQTT/Socket/BLE/HTTP/SNTP/GPIO/PWM) |
 | [module-selector](./skills/module-selector) | Module selection assistant (WiFi/LoRa/Radar/UWB/NearLink) |
 | [scbb-module-finder](./skills/scbb-module-finder) | SCBB module finder from AiPi-SCBB repository |
 | [add-scbb-module](./skills/add-scbb-module) | Guide for adding new peripheral driver modules to AiPi-SCBB |
@@ -107,6 +108,19 @@ Ai-Thinker Ai-WB2 series module development guide (BL602 chip) - Wi-Fi 4 + BLE 5
 - Developing with Ai-WB2 modules
 - Peripheral programming (GPIO, UART, PWM, ADC)
 - MQTT, HTTP network protocols
+
+### combo-at-commands
+
+Ai-Thinker Combo module AT command development assistant. Covers the Combo
+framework AT command set (V4.18P_3.8.0) for Ai-WB2 (BL602) and Ai-M61/M62
+(BL616/BL618) modules — WiFi, MQTT, Socket, BLE, HTTP, SNTP, GPIO, PWM and
+more.
+
+**Use cases:**
+- Developing IoT features with AT commands
+- Looking up AT command usage and parameters
+- Troubleshooting AT command / URC event issues
+- Planning AT command execution flows
 
 ### module-selector
 
