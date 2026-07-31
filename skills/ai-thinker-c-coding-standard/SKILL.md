@@ -13,20 +13,20 @@ description: 安信可（Ai-Thinker）嵌入式产品 C 语言编码规范。编
 
 ## 1. 函数头（最高优先级）
 
-详细函数头**只要求加在头文件 `.h` 中对外公开的接口声明上**，采用 Doxygen 风格、**英文注释**（描述首字母大写、英文句号结尾）。其余位置分级：`.c` 中的定义不重复完整注释，**函数超过 30 行或逻辑不直观时**加一行简注；静态函数、未对外声明的中断函数同理。
+详细函数头**只要求加在头文件 `.h` 中对外公开的接口声明上**，采用 Doxygen 风格、**中文注释**。其余位置分级：`.c` 中的定义不重复完整注释，**函数超过 30 行或逻辑不直观时**加一行简注；静态函数、未对外声明的中断函数同理。
 
 `.h` 对外接口固定模板：
 
 ```c
-/** @brief 函数概述与作用（首字母大写，英文句号结尾）.
+/** @brief 函数概述与作用.
  *
- *  @param[in]   param1     Input parameter description.
- *  @param[out]  *param2    Output parameter description (note pointer in/out and nullability).
- *  @return      Return value description.
- *  @retval      AXK_OK     Success.
- *  @retval      AXK_ERROR  Error.
- *  @note        Usage notes / preconditions. On modification, append modifier/date/change here.
- *  @see         Related function reference.
+ *  @param[in]   param1     输入参数说明.
+ *  @param[out]  *param2    输出参数说明（注明指针输入/输出及是否可为空）.
+ *  @return      返回值说明.
+ *  @retval      AXK_OK     成功.
+ *  @retval      AXK_ERROR  失败.
+ *  @note        使用说明/前置条件. 修改时在此追加修改人/日期/变更内容.
+ *  @see         相关函数引用.
  */
 返回值类型 函数名(参数列表);
 ```
@@ -37,19 +37,19 @@ description: 安信可（Ai-Thinker）嵌入式产品 C 语言编码规范。编
 示例（对外接口声明）：
 
 ```c
-/** @brief Log uart initialization function.
+/** @brief 日志串口初始化函数.
  *
- *  @param[in]  uart        Configure serial port printing, including serial port ID, pin, and baud rate.
- *  @return     Return the operation status. When the return value is AXK_OK, is successful.
- *  @retval     AXK_OK     Init successful.
- *  @retval     AXK_ERROR  Init error.
- *  @note       This function needs to be adapted according to different platforms.
+ *  @param[in]  uart        串口配置参数，包括串口ID、引脚和波特率.
+ *  @return     返回操作状态. 返回AXK_OK表示初始化成功.
+ *  @retval     AXK_OK     初始化成功.
+ *  @retval     AXK_ERROR  初始化失败.
+ *  @note       该函数需要根据不同的平台进行适配.
  *  @see
  */
 int32_t axk_uart_log_init(axk_uart_config_t uart);
 ```
 
-`.c` 中的简注格式：`// 功能简述（英文，首字母大写，无句号）`，如 `// Init uart and configure baud rate.`。简注位于函数定义上方，不加 Doxygen 前缀。
+`.c` 中的简注格式：`// 功能简述（中文，无句号）`，如 `// 初始化串口并配置波特率`。简注位于函数定义上方，不加 Doxygen 前缀。
 
 ## 2. 命名
 
@@ -94,3 +94,4 @@ int32_t axk_uart_log_init(axk_uart_config_t uart);
 - **`#include` 排列顺序**：系统头文件 → 第三方库头文件 → 项目头文件，每组间空一行
 - **统一使用返回码模式处理错误**：函数返回 `int32_t`，成功返回 `AXK_OK`，失败返回 `AXK_ERROR`（或具体错误码）；错误时及时 `return` 错误码，不使用 `goto cleanup` 模式
 - 以下位置加行注释：硬件寄存器操作、位域拼接/掩码运算、状态机跳转条件、中断保护/临界区、超时重试逻辑。禁止无意义注释（如 `// 增加 i`）；`.h` 开头加文件说明注释（模块功能、作者、日期）
+- **所有代码注释统一使用中文**
