@@ -5,6 +5,29 @@ description: Ai-Thinker Ai-WB2 series module development guide (BL602 chip) - Wi
 
 # Ai-Thinker Ai-WB2 Series Development Guide (BL602)
 
+## Coding Standard
+
+**All code development and review must follow the `ai-thinker-c-coding-standard` specification.**
+
+Key requirements:
+1. **Function Header Comments**: All functions (`.h` and `.c`) must have Doxygen-style function header comments, **Chinese comments are mandatory**
+2. **Comment Format**:
+   ```c
+   /**
+    * @brief 函数概述与作用
+    *
+    * @param[in]   param1     输入参数说明
+    * @param[out]  *param2    输出参数说明
+    * @return      返回值类型 返回值说明
+    *              - 错误码1: 错误描述
+    *              - 错误码2: 错误描述
+    * @note        使用说明/前置条件
+    */
+   ```
+3. **Naming**: Follow `axk` prefix convention for identifiers
+4. **Format**: 4 spaces indentation, K&R brace style, 120 char line limit
+5. **All code comments must be in Chinese**
+
 ## Programming Paradigm
 
 > **Important**: Unless the user explicitly requests **register-level (bare metal) programming**, all code examples in this skill use the **HOSAL (Hardware Operating System Abstraction Layer) library** for development, with loop logic implemented via **FreeRTOS tasks**.
