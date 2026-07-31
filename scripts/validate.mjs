@@ -3,6 +3,8 @@
 import { readdir, readFile, stat } from 'fs/promises';
 import { join, relative } from 'path';
 
+import { buildManifest, computeSkillHashes } from './lib/skill-hash.mjs';
+
 const SKILLS_DIR = join(process.cwd(), 'skills');
 
 async function findSkillFiles(dir) {
@@ -94,8 +96,39 @@ async function main() {
   }
   
   console.log(`\n📊 Found ${skillFiles.length} skill(s)`);
-  
-  if (hasErrors) {
+
+  // Manifest freshness check: the committed skills-manifest.json must match
+  // the current content hashes, otherwise CI cannot tell whether local skills
+  // are in sync with the remotes.
+  let manifestOk = true;
+  const manifestPath = join(process.cwd(), 'skills-manifest.json');
+  console.log('\n📋 Checking skills-manifest.json...');
+  try {
+    const committed = JSON.parse(await readFile(manifestPath, 'utf-8'));
+    const current = buildManifest(await computeSkillHashes(process.cwd()));
+    const committedSkills = JSON.stringify(committed.skills || {});
+    const currentSkills = JSON.stringify(current.skills);
+    if (
+      committed.schemaVersion !== current.schemaVersion ||
+      committedSkills !== currentSkills
+    ) {
+      manifestOk = false;
+      console.log('❌ skills-manifest.json is out of date');
+      console.log('   Run `npm run manifest` and commit the updated file.');
+    } else {
+      console.log('✅ skills-manifest.json is up to date');
+    }
+  } catch (err) {
+    manifestOk = false;
+    if (err.code === 'ENOENT') {
+      console.log('❌ skills-manifest.json is missing');
+      console.log('   Run `npm run manifest` and commit the generated file.');
+    } else {
+      console.log(`❌ Could not verify skills-manifest.json: ${err.message}`);
+    }
+  }
+
+  if (hasErrors || !manifestOk) {
     console.log('\n❌ Validation failed');
     process.exit(1);
   } else {

@@ -35,6 +35,8 @@
     "version:minor": "npm version minor --no-git-tag-version",
     "version:major": "npm version major --no-git-tag-version",
     "validate": "node scripts/validate.mjs",
+    "manifest": "node scripts/generate-manifest.mjs",
+    "check:updates": "node scripts/check-updates.mjs",
     "build": "node scripts/build.mjs",
     "install:all": "node scripts/install.mjs",
     "install": "node scripts/install.mjs"

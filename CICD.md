@@ -72,6 +72,26 @@ gh release create "${GIT_TAG_NAME}" \
     dist/**/*
 ```
 
+## 提交前：更新 skills-manifest.json
+
+仓库根目录的 `skills-manifest.json` 记录了每个 skill 的内容哈希，`npm run
+check:updates` 依靠它与远端清单对比来报告更新。
+
+发布流程要求：**每次修改任何 skill 内容后，提交前必须执行**：
+
+```bash
+npm run manifest
+git add skills-manifest.json
+```
+
+`npm run validate`（第 2 步，以及 GitHub Actions 的 validate 步骤）会校验
+`skills-manifest.json` 是否与当前内容一致，不一致会直接失败并提示先运行
+`npm run manifest`，因此不需要额外增加 CI 检查步骤。
+
+推送时把清单一并带上：Coding 主构建会把 `master` 同步到 GitHub，两个远端
+都会包含最新的 `skills-manifest.json`，这样 `npm run check:updates` 才能
+在两端都看到一致的哈希。
+
 ## 触发配置
 
 | 构建计划 | 触发方式 | 说明 |

@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 1,
+  "skills": {
+    "add-scbb-module": {
+      "hash": "163ae8041cb78ba707ec359c5039b0462c1483c222a240d064ee21d0f401c220",
+      "files": 1,
+      "size": 4335
+    },
+    "add-skills": {
+      "hash": "776903e2c917083eebc21839e28e7000118bb469a15095ad140eb96dc12c1608",
+      "files": 1,
+      "size": 3494
+    },
+    "ai-thinker-c-coding-standard": {
+      "hash": "aa0a800ae4d164b6190e6f1881c710d5b0064a53326ea02ba91db77a3c29803d",
+      "files": 1,
+      "size": 6887
+    },
+    "coder-ai-m62-m61": {
+      "hash": "ccc9986c38cf6765376fbab67e4ebee8c698eced2554bbd3ce12136c7e6a4f45",
+      "files": 108,
+      "size": 1728366
+    },
+    "coder-ai-wb2": {
+      "hash": "4b4b32c59ad43fd2a878187ab1282d7e1e4f4459ba178ae7369c880b3a9a2c3c",
+      "files": 49,
+      "size": 347088
+    },
+    "combo-at-commands": {
+      "hash": "c6310cd2e0d8b7d296f812a301fc3fb773369ca51c099b1b471e0fd0b75947bc",
+      "files": 16,
+      "size": 151967
+    },
+    "embedded-code-review": {
+      "hash": "31fed24e9d701f171573d2116ace722d93249c332157e4aca9609cdb2f9f5dae",
+      "files": 2,
+      "size": 22492
+    },
+    "module-selector": {
+      "hash": "46d33f20c2e71e561b071603cf4518da8b7db55d2cc711d7c2badd577903026c",
+      "files": 6,
+      "size": 28883
+    },
+    "ota-generator": {
+      "hash": "4a10aa590c081544cca42561b43d271463b6b66e5ce8b8baa6d246777a7e2834",
+      "files": 3,
+      "size": 20999
+    },
+    "scbb-module-finder": {
+      "hash": "9dced7a6ef1b9ff7e5a7171a722a254d6ebe662dbd0e615cc3ab32565be3f086",
+      "files": 1,
+      "size": 3689
+    }
+  }
+}

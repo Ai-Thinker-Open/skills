@@ -155,11 +155,14 @@ skills/
 │       ├── scripts/                # Helper scripts (optional)
 │       ├── references/             # Documentation loaded on demand (optional)
 │       └── assets/                 # Files used in output (optional)
+├── skills-manifest.json            # Content hashes for remote update checks
 ├── .coding-ci.yml                  # Coding CI/CD configuration
 ├── bin/                            # CLI tools
 │   └── cli.js                      # seahi-skills CLI
 ├── scripts/                        # Build and release scripts
 │   ├── validate.mjs                # Validate SKILL.md files
+│   ├── generate-manifest.mjs       # Regenerate skills-manifest.json
+│   ├── check-updates.mjs           # Check/apply remote skill updates
 │   ├── build.mjs                   # Build skills to dist/
 │   ├── install.mjs                 # Install skills to user directories
 │   └── release.sh                  # Local release script
@@ -336,6 +339,49 @@ ln -s $(pwd)/skills/add-skills ~/.claude/skills/add-skills
 | **Global** | `~/.<agent>/skills/` | Available across all projects |
 | **Project** | `./<agent>/skills/` | Committed with your project, shared with team |
 
+## Checking for Updates
+
+The repository keeps a `skills-manifest.json` at the root with deterministic
+SHA-256 content hashes for every skill. It is compared against the manifest on
+the GitHub (`github`) and Coding (`origin`) remotes to report when skills have
+changed upstream.
+
+```bash
+# Check both remotes (default branch: master)
+npm run check:updates
+
+# Only check one remote
+npm run check:updates -- --remote github
+
+# Check against a different branch
+npm run check:updates -- --branch main
+
+# Apply remote changes to skills/ and refresh installed copies
+npm run check:updates -- --update
+```
+
+Status icons:
+
+| Icon | Meaning |
+|------|---------|
+| ✅ | Local matches the remote |
+| ⬆️ | Remote has new content |
+| 🆕 | New skill exists on the remote |
+| 🗑 | Skill was removed on the remote |
+| ⚠️ | Remotes disagree — resolve manually |
+
+`--update` only restores the changed skill directories into the working tree —
+it never stages or commits, so you can review the changes before committing.
+It skips a skill when the local directory has uncommitted changes, or when the
+two remotes provide different content for the same skill. After applying
+changes it refreshes installed copies (only in directories that already
+contain the skill, e.g. `~/.codex/skills`, `~/.claude/skills`), regenerates
+`skills-manifest.json` in the working tree, and runs `npm run validate`.
+
+Exit codes: `0` everything is up to date, `1` updates are available (or some
+were skipped), `2` a remote is unreachable / missing the manifest, or an
+internal error occurred.
+
 ## Supported Platforms
 
 Skills follow the [Agent Skills specification](https://agentskills.io) and work with:
@@ -361,6 +407,12 @@ Skills follow the [Agent Skills specification](https://agentskills.io) and work 
 ```bash
 # Validate all skills
 npm run validate
+
+# Regenerate skills-manifest.json after editing skills
+npm run manifest
+
+# Check GitHub/Coding remotes for skill updates
+npm run check:updates
 
 # Build skills to dist/
 npm run build
@@ -403,4 +455,4 @@ Project uses `.coding-ci.yml` to configure Coding platform CI/CD pipeline.
 
 ## License
 
-MIT
+[MIT](./LICENSE)

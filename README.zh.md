@@ -152,11 +152,14 @@ skills/
 │       ├── scripts/                # 辅助脚本（可选）
 │       ├── references/             # 按需加载的文档（可选）
 │       └── assets/                 # 输出中使用的文件（可选）
+├── skills-manifest.json            # 用于远程更新检查的内容哈希
 ├── .coding-ci.yml                  # Coding CI/CD 配置
 ├── bin/                            # CLI 工具
 │   └── cli.js                      # seahi-skills CLI
 ├── scripts/                        # 构建和发布脚本
 │   ├── validate.mjs                # 验证 SKILL.md 文件
+│   ├── generate-manifest.mjs       # 重新生成 skills-manifest.json
+│   ├── check-updates.mjs           # 检查/应用远端 skill 更新
 │   ├── build.mjs                   # 构建 skills 到 dist/
 │   ├── install.mjs                 # 安装 skills 到用户目录
 │   └── release.sh                  # 本地发布脚本
@@ -345,6 +348,45 @@ ln -s $(pwd)/skills/coder-ai-wb2 ~/.claude/skills/coder-ai-wb2
 | **全局** | `~/.<agent>/skills/` | 所有项目可用 |
 | **项目** | `./<agent>/skills/` | 随项目提交，团队共享 |
 
+## 检查更新
+
+仓库根目录维护一份 `skills-manifest.json`，包含每个 skill 的确定性
+SHA-256 内容哈希。它会被拿来与 GitHub（`github`）和 Coding（`origin`）
+两个远端上的清单对比，用于报告上游 skill 是否发生了变化。
+
+```bash
+# 检查两个远端（默认分支：master）
+npm run check:updates
+
+# 只检查一个远端
+npm run check:updates -- --remote github
+
+# 检查其他分支
+npm run check:updates -- --branch main
+
+# 将远端变更应用到 skills/ 并刷新已安装副本
+npm run check:updates -- --update
+```
+
+状态图标：
+
+| 图标 | 含义 |
+|------|------|
+| ✅ | 本地与远端一致 |
+| ⬆️ | 远端有新内容 |
+| 🆕 | 远端新增 skill |
+| 🗑 | 远端已删除 skill |
+| ⚠️ | 两个远端内容不一致，需手动处理 |
+
+`--update` 只会把发生变更的 skill 目录恢复到工作区——不会 stage、不会提交，
+方便你 review 后再提交。当该 skill 本地存在未提交修改，或两个远端给出的
+内容不一致时，会跳过并提示。更新完成后会刷新已安装副本（只刷新已包含该
+skill 的目录，如 `~/.codex/skills`、`~/.claude/skills`），重新生成工作区中的
+`skills-manifest.json`，并运行 `npm run validate`。
+
+退出码：`0` 全部最新，`1` 存在可更新项（或有跳过项），`2` 远端不可达 /
+缺少清单，或发生内部错误。
+
 ## 支持的平台
 
 Skills 遵循 [Agent Skills 规范](https://agentskills.io)，兼容以下平台：
@@ -370,6 +412,12 @@ Skills 遵循 [Agent Skills 规范](https://agentskills.io)，兼容以下平台
 ```bash
 # 验证所有 skills
 npm run validate
+
+# 修改 skills 后重新生成 skills-manifest.json
+npm run manifest
+
+# 检查 GitHub/Coding 远端的 skill 更新
+npm run check:updates
 
 # 构建 skills 到 dist/
 npm run build
@@ -412,4 +460,4 @@ git push origin main --tags
 
 ## 许可证
 
-MIT
+[MIT](./LICENSE)
