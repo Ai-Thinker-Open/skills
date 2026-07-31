@@ -23,8 +23,15 @@ description: What this skill does and when to use it
 Instructions here...
 EOF
 
-# 3. Validate
+# 3. Regenerate the manifest and validate
+npm run manifest
 npm run validate
+
+# 4. Commit and push to both mirrors
+git add skills/<skill-name> skills-manifest.json
+git commit -m "feat(skills): add <skill-name>"
+git push github master
+git push origin master
 ```
 
 ## Skill Directory Structure
@@ -131,9 +138,12 @@ assets/
 
 ## Validation
 
-Always validate before committing:
+Every skill change must be reflected in `skills-manifest.json` — the remote
+update check relies on it, and `npm run validate` fails if the manifest is
+stale. Always regenerate it before committing:
 
 ```bash
+npm run manifest
 npm run validate
 ```
 
@@ -145,6 +155,9 @@ Expected output:
 ✅ skills/my-skill/SKILL.md
 
 📊 Found N skill(s)
+
+📋 Checking skills-manifest.json...
+✅ skills-manifest.json is up to date
 
 ✅ All skills are valid
 ```
@@ -195,9 +208,15 @@ description: Review code for quality, security, and best practices. Use when use
 
 ## After Creating
 
-1. Run `npm run validate`
+1. Run `npm run manifest` then `npm run validate`
 2. Test the skill:
    ```bash
    npx skills add ./skills --skill <skill-name> -a <agent>
    ```
-3. Commit and push
+3. Commit and push to both mirrors:
+   ```bash
+   git add skills/<skill-name> skills-manifest.json
+   git commit -m "feat(skills): add <skill-name>"
+   git push github master
+   git push origin master
+   ```

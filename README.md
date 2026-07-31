@@ -214,11 +214,16 @@ mkdir references # Documentation loaded on demand by the agent
 mkdir assets     # Templates, images, fonts used in output
 ```
 
-### Step 4: Validate Your Skill
+### Step 4: Regenerate the Manifest and Validate
+
+Every skill change must be reflected in `skills-manifest.json` — the remote
+update check relies on it, and `npm run validate` fails if the manifest is
+stale.
 
 ```bash
 # From the repo root
-npm run validate
+npm run manifest    # Refresh skills-manifest.json
+npm run validate    # Validate SKILL.md format + manifest freshness
 ```
 
 Expected output:
@@ -227,10 +232,29 @@ Expected output:
 
 ✅ skills/my-new-skill/SKILL.md
 
-📊 Found 2 skill(s)
+📊 Found N skill(s)
+
+📋 Checking skills-manifest.json...
+✅ skills-manifest.json is up to date
 
 ✅ All skills are valid
 ```
+
+### Step 5: Commit and Push
+
+```bash
+# Stage the new skill together with the refreshed manifest
+git add skills/my-new-skill skills-manifest.json
+git commit -m "feat(skills): add my-new-skill"
+
+# Keep both mirrors in sync
+git push github master
+git push origin master
+```
+
+Once pushed, other clones will detect the new skill as `🆕 远端新增` with
+`npm run check:updates` (see [Checking for Updates](#checking-for-updates)).
+Remember to run `npm run manifest` again whenever you edit an existing skill.
 
 ### Skill Frontmatter Fields
 

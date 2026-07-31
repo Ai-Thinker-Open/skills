@@ -211,11 +211,15 @@ mkdir references # 按需加载的文档
 mkdir assets     # 输出中使用的模板、图片、字体
 ```
 
-### 步骤 4：验证你的 Skill
+### 步骤 4：重新生成清单并验证
+
+每次修改 skill 后都必须同步更新 `skills-manifest.json`——远程更新检查依赖
+它，而且 `npm run validate` 在清单过期时会直接失败。
 
 ```bash
 # 在仓库根目录执行
-npm run validate
+npm run manifest    # 重新生成 skills-manifest.json
+npm run validate    # 验证 SKILL.md 格式 + 清单新鲜度
 ```
 
 预期输出：
@@ -224,10 +228,29 @@ npm run validate
 
 ✅ skills/my-new-skill/SKILL.md
 
-📊 Found 2 skill(s)
+📊 Found N skill(s)
+
+📋 Checking skills-manifest.json...
+✅ skills-manifest.json is up to date
 
 ✅ All skills are valid
 ```
+
+### 步骤 5：提交并推送
+
+```bash
+# 连同新 skill 和更新后的清单一起提交
+git add skills/my-new-skill skills-manifest.json
+git commit -m "feat(skills): add my-new-skill"
+
+# 保持两个远端同步
+git push github master
+git push origin master
+```
+
+推送后，其他克隆通过 `npm run check:updates` 会看到新 skill 显示为
+`🆕 远端新增`（参见[检查更新](#检查更新)）。以后每次编辑已有 skill，
+记得重新执行 `npm run manifest`。
 
 ### Skill Frontmatter 字段
 
