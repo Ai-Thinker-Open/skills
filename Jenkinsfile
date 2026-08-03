@@ -40,7 +40,8 @@ pipeline {
                         cd $WORKSPACE
                         export PATH=$PWD/node-v16.20.2-linux-x64/bin:$PATH
                         git remote set-url --push origin "https://${TOKEN}@github.com/Ai-Thinker-Open/skills.git"
-                        git push origin master
+                        git pull --rebase origin master
+                        git push origin HEAD:master
                     '''
                 }
             }
