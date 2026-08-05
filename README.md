@@ -64,6 +64,7 @@ ln -s $(pwd)/skills/ai-thinker-c-coding-standard ~/.claude/skills/ai-thinker-c-c
 | [embedded-code-review](./skills/embedded-code-review) | Ai-Thinker embedded C deep code review |
 | [coder-ai-m62-m61](./skills/coder-ai-m62-m61) | BL616/BL618 development guide (Wi-Fi 6 + BLE 5.0) |
 | [coder-ai-wb2](./skills/coder-ai-wb2) | Ai-WB2/BL602 development guide (Wi-Fi 4 + BLE 5.0) |
+| [coder-ra-01sc](./skills/coder-ra-01sc) | Ra-01SC series LoRa module development guide (LLCC68, sub-GHz over SPI) |
 | [combo-at-commands](./skills/combo-at-commands) | Ai-Thinker Combo AT command development assistant (WiFi/MQTT/Socket/BLE/HTTP/SNTP/GPIO/PWM) |
 | [module-selector](./skills/module-selector) | Module selection assistant (WiFi/LoRa/Radar/UWB/NearLink) |
 | [scbb-module-finder](./skills/scbb-module-finder) | SCBB module finder from AiPi-SCBB repository |
@@ -109,6 +110,15 @@ Ai-Thinker Ai-WB2 series module development guide (BL602 chip) - Wi-Fi 4 + BLE 5
 - Developing with Ai-WB2 modules
 - Peripheral programming (GPIO, UART, PWM, ADC)
 - MQTT, HTTP network protocols
+
+### coder-ra-01sc
+
+Ai-Thinker Ra-01SC series LoRa module development guide (LLCC68 chip, covering Ra-01SC/Ra-01SC-P/Ra-01SCH/Ra-01SCH-P) - sub-GHz RF transceiver controlled via SPI, covering LoRa (SF5-11, 125/250/500kHz), (G)FSK 0.6-300kbps, CAD, SPI command protocol, TX/RX programming and driver porting.
+
+**Use cases:**
+- Developing with Ra-01SC series LoRa modules (Ra-01SC/SCH and -P variants)
+- LoRa/GFSK point-to-point communication over SPI
+- Porting the official LLCC68 driver to a new platform
 
 ### combo-at-commands
 
@@ -385,6 +395,7 @@ ln -s $(pwd)/skills/ai-thinker-c-coding-standard ~/.claude/skills/ai-thinker-c-c
 ln -s $(pwd)/skills/embedded-code-review ~/.claude/skills/embedded-code-review
 ln -s $(pwd)/skills/coder-ai-m62-m61 ~/.claude/skills/coder-ai-m62-m61
 ln -s $(pwd)/skills/coder-ai-wb2 ~/.claude/skills/coder-ai-wb2
+ln -s $(pwd)/skills/coder-ra-01sc ~/.claude/skills/coder-ra-01sc
 ln -s $(pwd)/skills/add-scbb-module ~/.claude/skills/add-scbb-module
 ln -s $(pwd)/skills/add-skills ~/.claude/skills/add-skills
 ```
