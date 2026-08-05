@@ -70,6 +70,7 @@ ln -s $(pwd)/skills/ai-thinker-c-coding-standard ~/.claude/skills/ai-thinker-c-c
 | [add-scbb-module](./skills/add-scbb-module) | Guide for adding new peripheral driver modules to AiPi-SCBB |
 | [add-skills](./skills/add-skills) | Guide for adding new skills to this repo |
 | [ota-generator](./skills/ota-generator) | Ai-Thinker embedded product OTA firmware generator |
+| [cmw-wlan-test](./skills/cmw-wlan-test) | WLAN signaling test SOP for CMW-500 + AmebaDplus (TX power/EVM/RX sensitivity) |
 
 ### ai-thinker-c-coding-standard
 
@@ -167,6 +168,15 @@ Ai-Thinker embedded product OTA firmware generator. Supports two modes: add MD5 
 - Generating OTA upgrade firmware
 - Adding MD5 header to firmware files
 - Compiling from source to create OTA packages
+
+### cmw-wlan-test
+
+WLAN signaling-based measurement SOP for the R&S CMW-500 + Realtek AmebaDplus bench. Pure-SCPI workflow covers TX power, EVM, RX sensitivity, CCK/HT-MCS, and full compliance runs on 2.4 GHz / 5 GHz.
+
+**Use cases:**
+- Running TX power / EVM / RX-sensitivity measurements
+- 802.11a/b/g/n signaling tests
+- Full compliance test runs and report generation
 
 ## Repository Structure
 

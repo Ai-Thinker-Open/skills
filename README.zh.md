@@ -69,6 +69,7 @@ ln -s $(pwd)/skills/ai-thinker-c-coding-standard ~/.claude/skills/ai-thinker-c-c
 | [ota-generator](./skills/ota-generator) | OTA 固件生成器 |
 | [add-scbb-module](./skills/add-scbb-module) | 向 SCBB 库添加新模块 |
 | [add-skills](./skills/add-skills) | 向本仓库添加新 skill 的指南 |
+| [cmw-wlan-test](./skills/cmw-wlan-test) | CMW-500 WLAN 信令测试 SOP（TX 功率/EVM/RX 灵敏度） |
 
 ### ai-thinker-c-coding-standard
 
@@ -162,6 +163,15 @@ OTA 固件生成器。支持模式A（添加MD5包头）和模式B（从源码�
 - 创建新 skill
 - 学习 skill 格式和结构
 - 验证 skill
+
+### cmw-wlan-test
+
+基于信令的 WLAN 测试 SOP（R&S CMW-500 + Realtek AmebaDplus 测试台），Pure-SCPI 流程覆盖 TX 功率、EVM、RX 灵敏度、CCK/HT-MCS 及完整合规测试（2.4 GHz / 5 GHz）。
+
+**使用场景：**
+- 执行 TX 功率 / EVM / RX 灵敏度测量
+- 802.11a/b/g/n 信令测试
+- 完整合规测试与报告生成
 
 ## 仓库结构
 
