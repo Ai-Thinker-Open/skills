@@ -63,6 +63,7 @@ ln -s $(pwd)/skills/ai-thinker-c-coding-standard ~/.claude/skills/ai-thinker-c-c
 | [embedded-code-review](./skills/embedded-code-review) | 安信可嵌入式 C 代码深度审查 |
 | [coder-ai-m62-m61](./skills/coder-ai-m62-m61) | BL616/BL618 开发指南 (Wi-Fi 6 + BLE 5.0) |
 | [coder-ai-wb2](./skills/coder-ai-wb2) | Ai-WB2/BL602 开发指南 (Wi-Fi 4 + BLE 5.0) |
+| [coder-ra-01sc](./skills/coder-ra-01sc) | Ra-01SC 系列 LoRa 模组开发指南 (LLCC68,SPI 控制 sub-GHz) |
 | [combo-at-commands](./skills/combo-at-commands) | Combo 模组 AT 指令开发助手（WiFi/MQTT/Socket/BLE/HTTP/SNTP/GPIO/PWM） |
 | [module-selector](./skills/module-selector) | 安信可模组选型助手（WiFi/LoRa/雷达/UWB/星闪） |
 | [scbb-module-finder](./skills/scbb-module-finder) | SCBB 模块查找器 |
@@ -108,6 +109,15 @@ ln -s $(pwd)/skills/ai-thinker-c-coding-standard ~/.claude/skills/ai-thinker-c-c
 - Ai-WB2 模组开发
 - 外设编程 (GPIO、UART、PWM、ADC)
 - MQTT、HTTP 网络协议
+
+### coder-ra-01sc
+
+安信可 Ra-01SC 系列 LoRa 模组开发指南 (LLCC68 芯片,涵盖 Ra-01SC/Ra-01SC-P/Ra-01SCH/Ra-01SCH-P) - SPI 控制的 sub-GHz 射频收发,涵盖 LoRa (SF5-11, 125/250/500kHz)、(G)FSK 0.6-300kbps、CAD 信道检测、SPI 命令协议、收发编程与驱动移植。
+
+**使用场景：**
+- Ra-01SC 系列 LoRa 模组开发(Ra-01SC/SCH 及 -P 变体)
+- 基于 SPI 的 LoRa/GFSK 点对点通信
+- 官方 LLCC68 驱动向新平台移植
 
 ### combo-at-commands
 
@@ -393,6 +403,7 @@ ln -s $(pwd)/skills/ai-thinker-c-coding-standard ~/.claude/skills/ai-thinker-c-c
 ln -s $(pwd)/skills/embedded-code-review ~/.claude/skills/embedded-code-review
 ln -s $(pwd)/skills/coder-ai-m62-m61 ~/.claude/skills/coder-ai-m62-m61
 ln -s $(pwd)/skills/coder-ai-wb2 ~/.claude/skills/coder-ai-wb2
+ln -s $(pwd)/skills/coder-ra-01sc ~/.claude/skills/coder-ra-01sc
 ```
 
 ### 安装范围
