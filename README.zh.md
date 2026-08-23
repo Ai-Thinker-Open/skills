@@ -70,6 +70,7 @@ ln -s $(pwd)/skills/ai-thinker-c-coding-standard ~/.claude/skills/ai-thinker-c-c
 | [ota-generator](./skills/ota-generator) | OTA 固件生成器 |
 | [add-scbb-module](./skills/add-scbb-module) | 向 SCBB 库添加新模块 |
 | [add-skills](./skills/add-skills) | 向本仓库添加新 skill 的指南 |
+| [ai-thinker-bl-coredump-skill](./skills/ai-thinker-bl-coredump-skill) | Ai-Thinker 博流（BL 系列）模组 coredump 崩溃调试（crash log 解析 + GDB RSP + task_dump） |
 | [cmw-wlan-test](./skills/cmw-wlan-test) | CMW-500 WLAN 信令测试 SOP（TX 功率/EVM/RX 灵敏度） |
 
 ### ai-thinker-c-coding-standard
@@ -80,6 +81,15 @@ ln -s $(pwd)/skills/ai-thinker-c-coding-standard ~/.claude/skills/ai-thinker-c-c
 - 编写嵌入式 C 代码
 - 评审代码规范合规性
 - 生成 Doxygen 风格的函数头注释
+
+### ai-thinker-bl-coredump-skill
+
+安信可博流（BL 系列）模组 coredump 崩溃调试 skill。当用户提供 crash log、coredump 文件路径，或请求分析崩溃 / coredump / gdb 调试时使用。自动完成日志解析、端口分配、GDB 服务器启动、GDB 连接全流程。
+
+**使用场景：**
+- 分析 crash log 与 coredump 文件（串口 log 或 flash 读出的 crash.bin）
+- 恢复崩溃任务调用栈、寄存器与内存现场
+- 用 task_dump / task_list_ready / task_list_wait 进行 GDB 调试
 
 ### embedded-code-review
 

@@ -61,6 +61,7 @@ ln -s $(pwd)/skills/ai-thinker-c-coding-standard ~/.claude/skills/ai-thinker-c-c
 | Skill | Description |
 |-------|-------------|
 | [ai-thinker-c-coding-standard](./skills/ai-thinker-c-coding-standard) | Ai-Thinker embedded C coding standard |
+| [ai-thinker-bl-coredump-skill](./skills/ai-thinker-bl-coredump-skill) | Ai-Thinker Bouffalo (BL series) coredump crash debugging (log parsing + GDB RSP + task_dump) |
 | [embedded-code-review](./skills/embedded-code-review) | Ai-Thinker embedded C deep code review |
 | [coder-ai-m62-m61](./skills/coder-ai-m62-m61) | BL616/BL618 development guide (Wi-Fi 6 + BLE 5.0) |
 | [coder-ai-wb2](./skills/coder-ai-wb2) | Ai-WB2/BL602 development guide (Wi-Fi 4 + BLE 5.0) |
@@ -81,6 +82,15 @@ Ai-Thinker embedded product C coding standard. Use when writing, modifying, revi
 - Writing embedded C code
 - Reviewing code standards compliance
 - Generating Doxygen-style function headers
+
+### ai-thinker-bl-coredump-skill
+
+Ai-Thinker Bouffalo (BL series) coredump crash debugging skill. Use when the user provides a crash log or coredump file path, or asks to analyze a crash / coredump / GDB debugging. Automates log parsing, port allocation, GDB RSP server startup and GDB connection.
+
+**Use cases:**
+- Analyzing crash logs and coredump files (serial log or flash `crash.bin`)
+- Recovering crashed task call stack, registers and memory
+- GDB debugging with `task_dump` / `task_list_ready` / `task_list_wait`
 
 ### embedded-code-review
 
