@@ -40,7 +40,7 @@ Instructions for the agent to follow when this skill is activated.
 - 手动触发时工作流内会自动创建/推送 tag 并发布 Release，一次完成；但 tag 已存在时 `git tag` 步骤会失败，重复发布需先处理旧 tag。
 - 默认 `GITHUB_TOKEN` 创建的 tag/release 不会再触发其它 workflow（GitHub 防递归机制，2023 年起生效），因此 workflow 内推送的 tag 不会再次触发本工作流。
 - GitHub 会自动把最高 semver 的正式 Release 标记为 Latest。
-- 当前版本：v0.1.4（2026-08-05 发布，Latest）。
+- 当前版本：v0.1.5（2026-08-23 发布，Latest）。
 
 ### Jenkins 与本地构建
 
