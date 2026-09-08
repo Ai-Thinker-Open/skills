@@ -62,6 +62,7 @@ ln -s $(pwd)/skills/ai-thinker-c-coding-standard ~/.claude/skills/ai-thinker-c-c
 |-------|-------------|
 | [ai-thinker-c-coding-standard](./skills/ai-thinker-c-coding-standard) | Ai-Thinker embedded C coding standard |
 | [ai-thinker-bl-coredump-skill](./skills/ai-thinker-bl-coredump-skill) | Ai-Thinker Bouffalo (BL series) coredump crash debugging (log parsing + GDB RSP + task_dump) |
+| [board-pins](./skills/board-pins) | Ai-Thinker development board pin configuration lookup (pin map, pin reuse/conflict, per-board references) |
 | [embedded-code-review](./skills/embedded-code-review) | Ai-Thinker embedded C deep code review |
 | [coder-ai-m62-m61](./skills/coder-ai-m62-m61) | BL616/BL618 development guide (Wi-Fi 6 + BLE 5.0) |
 | [coder-ai-wb2](./skills/coder-ai-wb2) | Ai-WB2/BL602 development guide (Wi-Fi 4 + BLE 5.0) |
@@ -102,6 +103,20 @@ Ai-Thinker embedded C deep code review skill. Covers safety, memory management, 
 - Memory leak/overflow risk detection
 - ISR compliance review
 - Coding standard checklist verification
+
+### board-pins
+
+Ai-Thinker development board pin configuration lookup. Use when the user asks which pin / GPIO connects to what on a specific dev board, wants a pin map or pin definition table, or needs to check pin reuse and conflicts. Board data is stored as one reference document per board under `references/`.
+
+**Use cases:**
+- Querying a dev board's pin definition table (pin → function)
+- Finding an available pin for a peripheral (function → pin: GPIO/SPI/IIC/ADC/PWM/UART)
+- Checking pin reuse / conflicts and default NC or Flash-shared pins that must be avoided
+- Power pins (3V3/5V/GND), default serial port (TX/RX), LEDs and buttons
+
+Currently supported boards (one reference file per board under `references/`; see [`references/kit-boards-index.md`](./skills/board-pins/references/kit-boards-index.md) for the full catalog and spec links):
+- `Ai-WB2-12F-Kit` (manually verified)
+- All other `-Kit` dev boards (Ai-M6x/Ai-WBx/BWx/TG, PB/TB, Ai-BS21/Ai-WS1, LoRa/Ra-08, Rd-60/Rd-Kit, BU03/04/NodeMCU-BU01, VC-01/02, GP-01/02, EC-01/01F/01G) — auto-parsed from official spec sheets; **verify against the spec before wiring**.
 
 ### coder-ai-m62-m61
 

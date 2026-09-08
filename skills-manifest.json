@@ -21,6 +21,11 @@
       "files": 1,
       "size": 6887
     },
+    "board-pins": {
+      "hash": "2416b7b0299cfa2b42cd271a2809d748ff59569135bf8fa5f7d457a4ae1d5e56",
+      "files": 50,
+      "size": 166826
+    },
     "cmw-wlan-test": {
       "hash": "75106c176d9dc7e05c1320cfc149c2e4eae7cf2b9eb6492f947659bbbeb14206",
       "files": 16,
