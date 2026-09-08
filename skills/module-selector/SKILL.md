@@ -7,7 +7,7 @@ description: 安信可模组选型助手。当用户需要选择物联网模组�
 
 ## 数据来源
 
-模组信息来源于安信可官方文档仓库，确保数据准确。
+模组信息来源于安信可官方文档源仓库 `vitpress_docs_resoure`（products 分类目录：wifi / lr / lorawan / radar / uwb / nearlink / bt / nb-iot / gps / voice_module 等），确保数据准确。各模块细分与规格书链接以官方源 index 为准。
 
 ## 输出格式要求
 
@@ -45,37 +45,64 @@ description: 安信可模组选型助手。当用户需要选择物联网模组�
 
 ## 模组分类
 
-### 1. Wi-Fi 系列
-- **Ai-WB2**: Wi-Fi 4 + BLE 5.0, 高性价比
-- **Ai-M61**: Wi-Fi 6 + BLE 5.3, 音视频首选
-- **Ai-M62**: Wi-Fi 6 + BLE 5.3, 低功耗 120μA
-- **Ai-M64**: Wi-Fi 6 + BLE 5.3, 超低功耗 90μA
-- **BW系列**: 双频 Wi-Fi (2.4G+5.8G)
-- **ESP8266**: 经典 Wi-Fi 4
+### 1. Wi-Fi 系列（按协议代际细分）
 
-详见: [wifi-modules.md](references/wifi-modules.md)
+**Wi-Fi 4 + BLE 双模（低成本经典）**
+- **Ai-WB2** (BL602): Wi-Fi 4 + BLE 5.0, 高性价比、生态最成熟
+- **Ai-WB3** (亮牛 LN882H): Wi-Fi 4 + BLE 5.1, 另一起 Wi-Fi+BLE 方案
+- **Ai-WB1** (联盛德 W800): Wi-Fi 4 + BLE 4.2, 早期经典（新项目建议选 Ai-WB2）
 
-### 2. LoRa/LoRaWAN 系列
-- **Ra-01系列**: 433MHz 点对点
-- **Ra-08/Ra-09**: LoRaWAN 组网
-- **RG系列**: LoRaWAN 网关
+**Wi-Fi 6 + BLE 双模（新一代）**
+- **Ai-M61** (BL618): Wi-Fi 6 + BLE 5.3 + Thread, 音视频/摄像头首选
+- **Ai-M62** (BL616): Wi-Fi 6 + BLE 5.3 + Thread, 均衡低功耗 120μA, 封装最全
+- **Ai-M64** (BL616CL): Wi-Fi 6 + BLE 5.3, 超低功耗 90μA（电池供电首选）
+  - 细分: M64P（Power）/ M64L（Low-power）
 
-详见: [lora-modules.md](references/lora-modules.md)
+**双频 Wi-Fi（2.4G + 5.8G）**
+- **BW16 / BW20** (RTL8720DN / RTL8711): 双频 Wi-Fi 4 + BLE, BW20 支持 CSI/Mesh
+- **BW21** (RTL8735B): 双频 + BLE 5.1, 摄像头模组（ISP + H264/H265 + 神经网络）
+- **BW60** (RTL8711F): **双频 Wi-Fi 6** + BLE 5.4, 超低功耗
 
-### 3. 雷达系列
-- **Rd-01**: 24GHz, WiFi+BLE+雷达三合一
-- **Rd-03**: 24GHz, 人体检测
+**经典 / 平台专供**
+- **ESP8266/ESP32**: 经典 Wi-Fi 4, 生态最成熟
+- **TG系列**: 直连天猫精灵等生态平台
+
+详见: [wifi-modules.md](references/wifi-modules.md)（含"快速选型总览"矩阵表）
+
+### 2. LoRa/LoRaWAN 系列（按应用模式细分）
+
+**点对点 LoRa**（SPI 从设备，外挂 MCU）
+- **Ra-01 系列**: 410~525MHz 经典 / 大功率 / 小尺寸
+- **Ra-01SH / Ra-01SCH**: 868/915MHz 国际频段
+- **Ra-05 / Ra-05U**: 2.4GHz
+- **Ra-11 / Ra-20**: 多频新一代（LR11xx/LR2021）
+
+**LoRaWAN 组网**（自带 MCU 跑节点）
+- **Ra-08** (ASR6601CB) / **Ra-09** (STM32WLE5)
+
+**LoRaWAN 网关**（建网）
+- **RG-02 / RG-03H**: LoRaWAN 网关
+
+详见: [lora-modules.md](references/lora-modules.md)（含按芯片/频段细分）
+
+### 3. 雷达系列（按频段/功能细分）
+- **Rd-01**: 24GHz, WiFi+BLE+雷达三合一, 人体存在
+- **Rd-03**: 24GHz 人体检测（V2 多版本：Rd-03D 轨迹 / Rd-03L 低功耗 / Rd-03E 测距手势 / Rd-03H 极窄）
 - **Rd-04**: 10GHz, 微动检测
-- **Rd-6X**: 60GHz, 高精度检测
+- **Rd-6X**: 60GHz（Rd-60/Rd-61）, 高精度/测距/手势
+- **Rd-100**: 24GHz 感应（Rd-101A/103A, 矽典微, 6m）
+- **Rd-Kit**: 调试板
 
 详见: [radar-modules.md](references/radar-modules.md)
 
-### 4. 其他系列
-- **UWB**: 高精度定位 10cm
-- **NearLink 星闪**: Wi-Fi + BLE + SLE
-- **NB-IoT**: 低功耗广域网
-- **蓝牙**: BLE 模组
-- **GPS**: 定位导航
+### 4. 其他系列（按技术细分）
+- **UWB**: BU01/BU03/BU04, 高精度定位 10cm
+- **NearLink 星闪**: Ai-BS21 / Ai-WS1
+- **蓝牙**: PB 系列(奉加微) / TB 系列(泰凌微) / 蓝牙网关 ESP32-G
+- **NB-IoT**: EC-01/EC-01G/EC-01F（EC616S）
+- **GPS/BDS**: GP-01/GP-02
+- **AI 语音**: VC-01/VC-02（云知声）
+- **RF433**: Si4432
 
 详见: [other-modules.md](references/other-modules.md)
 
@@ -97,12 +124,20 @@ description: 安信可模组选型助手。当用户需要选择物联网模组�
 | WiFi、智能家居 | Ai-WB2 / Ai-M62 | wifi-modules.md |
 | 音视频、摄像头 | Ai-M61 | wifi-modules.md |
 | 低功耗、电池供电 | Ai-M64 / Ai-M62 | wifi-modules.md |
-| 双频、5GHz | BW系列 | wifi-modules.md |
-| 远距离、农村 | LoRa Ra-01 | lora-modules.md |
+| 双频、5GHz | BW系列(CBW60为Wi-Fi6) | wifi-modules.md |
+| 经典、生态最成熟 | ESP8266/ESP32 | wifi-modules.md |
+| 直连生态平台(天猫精灵) | TG系列 | wifi-modules.md |
+| 远距离、农村(点对点) | LoRa Ra-01 系列 | lora-modules.md |
 | 组网、多节点 | LoRaWAN Ra-08/Ra-09 | lora-modules.md |
+| 建 LoRaWAN 网络 | RG 网关 | lora-modules.md |
 | 人体检测、雷达 | Rd-01 / Rd-03 | radar-modules.md |
-| 高精度定位 | UWB BU系列 | other-modules.md |
+| 精准测距/手势 | Rd-60/Rd-61 | radar-modules.md |
+| 高精度定位 | UWB BU 系列 | other-modules.md |
 | 星闪协议 | NearLink Ai-BS21 | other-modules.md |
+| 蓝牙 BLE 家电 | PB/TB 系列 | other-modules.md |
+| NB-IoT 物联 | EC 系列 | other-modules.md |
+| 定位导航 | GP 系列 | other-modules.md |
+| 离线语音控制 | VC 系列 | other-modules.md |
 
 ### 步骤 3: 提供详细信息
 
